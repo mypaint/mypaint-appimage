@@ -1,0 +1,12 @@
+*** mypaint-old	Thu Dec 20 14:29:23 2018
+--- mypaint-new	Thu Dec 20 20:42:42 2018
+***************
+*** 216,221 ****
+--- 216,222 ----
+      # There is no need to return the datadir of mypaint-data.
+      # It will be set at build time. I still check brushes presence.
+      import lib.config
++     lib.config.mypaint_brushdir = join(prefix, 'share', 'mypaint-data/2.0/brushes')
+      if not os.path.isdir(lib.config.mypaint_brushdir):
+          logger.critical('Default brush collection not found!')
+          logger.critical('It should have been here: %r', lib.config.mypaint_brushdir)
