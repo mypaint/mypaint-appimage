@@ -27,6 +27,11 @@ yum install -y intltool make git swig python-setuptools gettext gcc-c++ \
   libpng-devel lcms2-devel json-c-devel \
   gtk3 gobject-introspection || exit 1
 
+# Optimize compiler flags for better perf
+# These are pretty generic, ideally one would compile for own native arch
+# We could try to target several CPU families in the future and distribute
+# several binary packages.
+export CFLAGS='-Ofast -ftree-vectorize -fopt-info-vec-optimized -funsafe-math-optimizations -funsafe-loop-optimizations'
 
 mkdir -p /work || exit 1
 cd /work || exit 1
