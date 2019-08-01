@@ -7,8 +7,7 @@ services: docker
 
 
 before_script:
-  - git clone https://github.com/SpiNNakerManchester/SupportScripts.git support
-  - python support/travis_blocking_stdout.py
+  - python scripts/outputstreams_set_blocking.py
   - git clone https://github.com/mypaint/mypaint.git
   #- bash ci/check_commit.sh master
   - 'if [ -e travis.cancel ]; then
