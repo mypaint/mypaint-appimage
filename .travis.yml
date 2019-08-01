@@ -5,6 +5,9 @@ compiler: g++
 sudo: required
 services: docker
 
+git:
+  quiet: true
+  depth: 1
 
 before_script:
   - python scripts/outputstreams_set_blocking.py
