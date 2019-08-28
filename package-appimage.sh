@@ -48,10 +48,6 @@ mkdir -p "$APPDIR/usr/share"
 #sudo chown -R "$USER" "/${PREFIX}/"
 
 cp -a /usr/local/bin/$LOWERAPP "$APPDIR/usr/bin"
-(cd "$APPDIR/usr/bin" && patch -N -p0 mypaint /sources/mypaint-brushdir.patch)
-
-#exit
-
 cp -a /usr/local/lib/*${LOWERAPP}* "$APPDIR/usr/lib"
 cp -a /usr/local/share/*${LOWERAPP}* "$APPDIR/usr/share"
 
@@ -67,13 +63,8 @@ if [ -e "/usr/lib64/girepository-1.0" ]; then
 fi
 
 
-#cp -a /usr/local/bin/zenity "$APPDIR/usr/bin" || exit 1
-#cp -a /usr/local/share/zenity "$APPDIR/usr/share" || exit 1
-
-
 cd "$APPDIR" || exit 1
 
-#exit
 
 # Copy in the dependencies that cannot be assumed to be available
 # on all target systems
@@ -170,8 +161,6 @@ cp -a /work/appimage-helper-scripts/apprun-helper.sh "./apprun-helper.sh" || exi
 get_desktop || exit 1
 get_icon || exit 1
 
-#exit
-
 
 echo ""
 echo "########################################################################"
@@ -199,30 +188,6 @@ cp -a "/sources/ci/$LOWERAPP.wrapper" "$APPDIR/usr/bin/$LOWERAPP.wrapper"
 #DESKTOP_NAME=$(cat "$APPDIR/$LOWERAPP.desktop" | grep "^Name=.*")
 #sed -i -e "s|${DESKTOP_NAME}|${DESKTOP_NAME} (AppImage)|g" "$APPDIR/$LOWERAPP.desktop"
 
-
-echo ""
-echo "########################################################################"
-echo ""
-echo "Update LensFun database"
-echo ""
-
-# Update the Lensfun database and put the newest version into the bundle
-#export PYTHONPATH=/$PREFIX/lib/python3.6/site-packages:$PYTHONPATH
-LFDIR=$(find /usr/local/lib/python*/site-packages/ -name lensfun)
-if [ -n "$LFDIR" ]; then
-	export PYTHONPATH="$(dirname "$LFDIR")":$PYTHONPATH
-	echo "PYTHONPATH: $PYTHONPATH"
-fi
-"/usr/local/bin/lensfun-update-data"
-mkdir -p usr/share/lensfun/version_1
-if [ -e /var/lib/lensfun-updates/version_1 ]; then
-	cp -a /var/lib/lensfun-updates/version_1/* usr/share/lensfun/version_1
-else
-	cp -a "/usr/local/share/lensfun/version_1/"* usr/share/lensfun/version_1
-fi
-printf '%s\n' "" "==================" "Contents of lensfun database:"
-ls usr/share/lensfun/version_1
-echo ""
 
 # Workaround for:
 # ImportError: /usr/lib/x86_64-linux-gnu/libgdk-x11-2.0.so.0: undefined symbol: XRRGetMonitors

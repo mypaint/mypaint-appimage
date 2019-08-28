@@ -45,7 +45,9 @@ make install || exit 1
 
 
 cd /sources/mypaint || exit 1
-python setup.py managed_install
+python setup.py build_config \
+       --brushdir-path="{installation-prefix}/share/mypaint-data/2.0/brushes" \
+       install --prefix=/usr/local
 
 touch /work/build.done
 
