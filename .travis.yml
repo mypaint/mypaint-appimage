@@ -12,21 +12,18 @@ git:
 before_script:
   - python scripts/outputstreams_set_blocking.py
   - git clone https://github.com/mypaint/mypaint.git
-  #- bash ci/check_commit.sh master
+  - git clone https://github.com/mypaint/libmypaint.git
+  - git clone https://github.com/mypaint/mypaint-brushes.git
   - 'if [ -e travis.cancel ]; then
         exit 0;
     fi'
-  - travis_wait 120 sleep infinity & sudo docker pull photoflow/docker-trusty-appimage-base
   - sudo docker run -it -v $(pwd):/sources -e "GIT_BRANCH=master" centos:7 bash /sources/mkappimage.sh
 
 after_success:
     - cd $TRAVIS_BUILD_DIR
-    - pwd
     - ls -lh out/* # Assuming you have some files in out/ that you would like to upload
-    #- wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
     - wget -c https://github.com/aferrero2707/uploadtool/raw/master/upload_rotate.sh
     - bash  ./upload_rotate.sh "continuous" out/* >& /dev/null
-    #- bash  ./upload_rotate.sh "continuous" $TRAVIS_BUILD_DIR/LuminanceHDR/commit-master.hash >& /dev/null
 
 branches:
   except:
