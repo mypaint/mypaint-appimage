@@ -15,7 +15,7 @@ echo "  LOWERAPP: \"$LOWERAPP\""
 echo "  AI_SCRIPTS_DIR: \"${AI_SCRIPTS_DIR}\""
 echo ""
 
-source /work/appimage-helper-scripts/functions.sh
+source /sources/scripts/helpers/functions.sh
 
 
 #locale-gen en_US.UTF-8
@@ -24,14 +24,12 @@ export LANGUAGE="en_US:en"
 export LC_ALL="en_US.UTF-8"
 
 
-
 echo ""
 echo "########################################################################"
 echo ""
 echo "Creating and cleaning AppImage folder"
 
-#cp "${AI_SCRIPTS_DIR}"/excludelist . || exit 1
-cp /work/appimage-helper-scripts/excludelist "$APPROOT/excludelist"
+cp /sources/scripts/helpers/excludelist "$APPROOT/excludelist"
 
 # Remove old AppDir structure (if existing)
 export APPDIR="${APPROOT}/${APP}.AppDir"
@@ -154,7 +152,7 @@ echo ""
 #get_apprun || exit 1
 cp -a "${AI_SCRIPTS_DIR}/AppRun" . || exit 1
 #cp -a "${AI_SCRIPTS_DIR}/fixes.sh" . || exit 1
-cp -a /work/appimage-helper-scripts/apprun-helper.sh "./apprun-helper.sh" || exit 1
+cp -a /sources/scripts/helpers/apprun-helper.sh "./apprun-helper.sh" || exit 1
 #cp -a "${AI_SCRIPTS_DIR}/check_updates.sh" . || exit 1
 #cp -a "${AI_SCRIPTS_DIR}/zenity.sh" usr/bin || exit 1
 #wget -q https://raw.githubusercontent.com/aferrero2707/appimage-helper-scripts/master/apprun-helper.sh -O "./apprun-helper.sh" || exit 1
@@ -195,7 +193,7 @@ cp "$(ldconfig -p | grep libgdk-x11-2.0.so.0 | cut -d ">" -f 2 | xargs)" ./usr/l
 cp "$(ldconfig -p | grep libgtk-x11-2.0.so.0 | cut -d ">" -f 2 | xargs)" ./usr/lib/
 
 
-(cd /work/appimage-helper-scripts/appimage-exec-wrapper2 && make && cp -a exec.so "$APPDIR/usr/lib/exec_wrapper2.so") || exit 1
+(cd /sources/scripts/helpers/appimage-exec-wrapper2 && make && cp -a exec.so "$APPDIR/usr/lib/exec_wrapper2.so") || exit 1
 
 
 
