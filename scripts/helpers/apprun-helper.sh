@@ -102,7 +102,7 @@ fix_library() {
 	fi
 	echo "  system library version: $lv"
 	
-	ailib="$(realpath "$(ls "$AILIBDIR/$lib.so"* | tail -n 1)")"
+	ailib="$(readlink -f "$(ls "$AILIBDIR/$lib.so"* | tail -n 1)")"
 	echo "  ailib: \"$ailib\""
 	if [ -n "$ailib" ]; then
 	  ailib3="$(basename "$ailib")"
