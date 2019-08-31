@@ -109,6 +109,10 @@ delete_blacklisted2
 # over a slight increase in load times
 find "$APPDIR/usr" -name "*.py[co]" -exec rm -f {} +
 
+# Delete the tests directories in the bundled numpy
+find "$APPDIR/usr/lib" -type d -wholename "*numpy*tests*" -exec rm -rf {} +
+
+
 echo ""
 echo "########################################################################"
 echo ""
