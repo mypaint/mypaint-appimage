@@ -1,6 +1,5 @@
 #! /bin/bash
 
-# Prefix (without the leading "/") in which RawTherapee and its dependencies are installed:
 LOWERAPP=${APP,,}
 export PATH="/usr/local/bin:${PATH}"
 export LD_LIBRARY_PATH="/usr/local/lib64:/usr/local/lib:${LD_LIBRARY_PATH}"
@@ -42,8 +41,6 @@ echo ""
 mkdir -p "$APPDIR/usr/bin"
 mkdir -p "$APPDIR/usr/lib"
 mkdir -p "$APPDIR/usr/share"
-
-#sudo chown -R "$USER" "/${PREFIX}/"
 
 cp -a /usr/local/bin/$LOWERAPP "$APPDIR/usr/bin"
 cp -a /usr/local/lib/*${LOWERAPP}* "$APPDIR/usr/lib"
@@ -144,7 +141,6 @@ echo "Copy desktop file and application icon"
 mkdir -p usr/share/icons
 echo "cp -r \"/usr/local/share/icons/\"* \"usr/share/icons\""
 cp -r "/usr/local/share/icons/"* "usr/share/icons" || exit 1
-#echo ""
 mkdir -p usr/share/applications
 cp /usr/local/share/applications/${LOWERAPP}.desktop usr/share/applications || exit 1
 
@@ -155,14 +151,8 @@ echo ""
 echo "Creating top-level desktop and icon files, and application launcher"
 echo ""
 
-# TODO Might want to "|| exit 1" these, and generate_status
-#get_apprun || exit 1
 cp -a "${AI_SCRIPTS_DIR}/AppRun" . || exit 1
-#cp -a "${AI_SCRIPTS_DIR}/fixes.sh" . || exit 1
 cp -a /sources/scripts/helpers/apprun-helper.sh "./apprun-helper.sh" || exit 1
-#cp -a "${AI_SCRIPTS_DIR}/check_updates.sh" . || exit 1
-#cp -a "${AI_SCRIPTS_DIR}/zenity.sh" usr/bin || exit 1
-#wget -q https://raw.githubusercontent.com/aferrero2707/appimage-helper-scripts/master/apprun-helper.sh -O "./apprun-helper.sh" || exit 1
 get_desktop || exit 1
 get_icon || exit 1
 
@@ -213,71 +203,28 @@ echo ""
 # Strip binaries.
 strip_binaries
 
-export GIT_DESCRIBE=$(cd /sources && git describe)
-echo "RT_BRANCH: ${RT_BRANCH}"
+export GIT_DESCRIBE=$(cd /sources/mypaint && git describe --tags)
 echo "GIT_DESCRIBE: ${GIT_DESCRIBE}"
 
-
-
-# Generate AppImage; this expects $ARCH, $APP and $VERSION to be set
 cd "$APPROOT"
-glibcVer="$(glibc_needed)"
-#ver="git-${RT_BRANCH}-$(date '+%Y%m%d_%H%M')-glibc${glibcVer}"
-if [ "x${RT_BRANCH}" = "xreleases" ]; then
-	rtver=$(cat AboutThisBuild.txt | grep "Version:" | head -n 1 | cut -d" " -f 2)
-	ver="${rtver}-$(date '+%Y%m%d_%H%M')"
-else
-	ver="git-${RT_BRANCH}-$(date '+%Y%m%d_%H%M')"
-fi
 export ARCH="x86_64"
-export VERSION="${ver}"
-export VERSION2="${RT_BRANCH}-${GIT_DESCRIBE}-$(date '+%Y%m%d')"
+export VERSION="${GIT_DESCRIBE}"
+export VERSION_FULL="${GIT_DESCRIBE}-$(date '+%Y-%m-%d_%H:%M')"
 echo "VERSION:  $VERSION"
-echo "VERSION2: $VERSION2"
+echo "VERSION_FULL: $VERSION_FULL"
 
-echo "${APP}-${RT_BRANCH}" > "$APPDIR/VERSION.txt"
-echo "${GIT_DESCRIBE}-$(date '+%Y%m%d')" >> "$APPDIR/VERSION.txt"
-echo "${APP}-${VERSION2}.AppImage" >> "$APPDIR/VERSION.txt"
+echo "${APP}" > "$APPDIR/VERSION.txt"
+echo "${VERSION_FULL}" >> "$APPDIR/VERSION.txt"
 
-wd="$(pwd)"
-mkdir -p ../out/
 export NO_GLIBC_VERSION=true
 export DOCKER_BUILD=true
-#export SIGN="1"
-AI_OUT="../out/${APP}-${VERSION}-${ARCH}.AppImage"
+
+# Generate AppImage; this expects $ARCH, $APP and $VERSION to be set
 generate_type2_appimage
 
-if [ "x" = "y" ]; then
-#generate_appimage
-# Download AppImageAssistant
-URL="https://github.com/AppImage/AppImageKit/releases/download/6/AppImageAssistant_6-x86_64.AppImage"
-rm -f AppImageAssistant
-wget -c "$URL" -O AppImageAssistant
-chmod a+x ./AppImageAssistant
-(rm -rf /tmp/squashfs-root && mkdir /tmp/squashfs-root && cd /tmp/squashfs-root && bsdtar xfp $wd/AppImageAssistant) || exit 1
-#./AppImageAssistant --appimage-extract
-mkdir -p ../out || true
-GLIBC_NEEDED=$(glibc_needed)
-rm "${AI_OUT}" 2>/dev/null || true
-/tmp/squashfs-root/AppRun ./$APP.AppDir/ "${AI_OUT}"
-fi
+APPIM_FILE_NAME="${APP}-${VERSION_FULL}.AppImage"
 
-ls ../out/*
-
-rm -f ../out/${APP}-${VERSION2}.AppImage
-mv "${AI_OUT}" ../out/${APP}-${VERSION2}.AppImage
-
-
-########################################################################
-# Upload the AppDir
-########################################################################
-
-pwd
-ls ../out/*
-#transfer ../out/*
-#echo ""
-#echo "AppImage has been uploaded to the URL above; use something like GitHub Releases for permanent storage"
 mkdir -p /sources/out
-cp ../out/${APP}-${VERSION2}.AppImage /sources/out
-cd /sources/out || exit 1
-sha256sum ${APP}-${VERSION2}.AppImage > ${APP}-${VERSION2}.AppImage.sha256sum
+cp ../out/*.AppImage "/sources/out/${APPIM_FILE_NAME}"
+cd /sources/out
+sha256sum "${APPIM_FILE_NAME}" > "${APPIM_FILE_NAME}".sha256sum
