@@ -107,7 +107,10 @@ echo ""
 # Delete dangerous libraries; see
 # https://github.com/probonopd/AppImages/blob/master/excludelist
 delete_blacklisted2
-#exit
+
+# Remove .pyc and .pyo files - prioritizing bundle size
+# over a slight increase in load times
+find "$APPDIR/usr" -name "*.py[co]" -exec rm -f {} +
 
 echo ""
 echo "########################################################################"
