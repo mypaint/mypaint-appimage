@@ -49,6 +49,10 @@ cp -a /usr/local/bin/$LOWERAPP "$APPDIR/usr/bin"
 cp -a /usr/local/lib/*${LOWERAPP}* "$APPDIR/usr/lib"
 cp -a /usr/local/share/*${LOWERAPP}* "$APPDIR/usr/share"
 
+# Not all distros have the strings utility in the base install
+# Used at startup to check whether to use bundled or installed libs
+cp -L /usr/bin/strings "$APPDIR/usr/bin"
+
 run_hooks
 
 

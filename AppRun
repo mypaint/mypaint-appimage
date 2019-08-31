@@ -5,41 +5,36 @@ DIR="`( cd \"$DIR\" && readlink -f $(pwd) )`"
 echo "DIR: $DIR"
 export APPDIR=$DIR
 
+export PYTHONHOME=$DIR/usr/
+export PATH=$DIR/usr/bin:$PATH
+
 source "$APPDIR/apprun-helper.sh"
 save_environment
 make_temp_libdir
 link_libraries
 echo "AILIBDIR=$AILIBDIR"
-#export APPDIR2=$AILIBDIR
+
+init_environment
+
 fix_libxcb_dri3
 fix_stdlibcxx
 #fix_fontconfig
 fix_library "libfontconfig"
 fix_library "libfreetype"
 
-
-init_environment
 export APPDIRS=$AILIBDIR:$APPDIRS
 
 init_gtk
 
-export PYTHONHOME=$DIR/usr/
-
-export PATH=$DIR/usr/bin:$PATH
-
-export PYTHONPATH=$DIR/usr/share/pyshared/:$(readlink -f "$DIR/usr/lib/gimp/2.0/python"):$PYTHONPATH
-
 #export XDG_CONFIG_DIRS=$DIR/usr/share:$XDG_CONFIG_DIRS
 export XDG_DATA_DIRS=$DIR/usr/share:$XDG_DATA_DIRS:/usr/local/share:/usr/share
 export GI_TYPELIB_PATH=$DIR/usr/lib/girepository-1.0
-
 
 if [ -e /etc/fonts/fonts.conf ]; then
   export FONTCONFIG_PATH=/etc/fonts
 fi
 
 run_hooks
-
 
 python $DIR/usr/bin/mypaint "$@"
 
