@@ -61,8 +61,9 @@ if [ -e "/usr/lib64/girepository-1.0" ]; then
 	cp -a "/usr/lib64/girepository-1.0" "$APPDIR/usr/lib"
 fi
 
+set -e
 
-cd "$APPDIR" || exit 1
+cd "$APPDIR"
 
 
 # Copy in the dependencies that cannot be assumed to be available
@@ -80,7 +81,7 @@ echo ""
 
 # Copy MIME files
 mkdir -p usr/share/image
-cp -a /usr/share/mime/image/x-*.xml usr/share/image || exit 1
+cp -a /usr/share/mime/image/x-*.xml usr/share/image
 fi
 
 
@@ -124,7 +125,7 @@ echo ""
 # system in which the AppImage will be executed
 mkdir -p usr/optional/fontconfig
 fc_prefix="$(pkg-config --variable=libdir fontconfig)"
-cp -a "${fc_prefix}/libfontconfig"* usr/optional/fontconfig || exit 1
+cp -a "${fc_prefix}/libfontconfig"* usr/optional/fontconfig
 
 
 echo ""
@@ -144,9 +145,9 @@ echo "Copy desktop file and application icon"
 # Copy hicolor icon theme
 mkdir -p usr/share/icons
 echo "cp -r \"/usr/local/share/icons/\"* \"usr/share/icons\""
-cp -r "/usr/local/share/icons/"* "usr/share/icons" || exit 1
+cp -r "/usr/local/share/icons/"* "usr/share/icons"
 mkdir -p usr/share/applications
-cp /usr/local/share/applications/${LOWERAPP}.desktop usr/share/applications || exit 1
+cp /usr/local/share/applications/${LOWERAPP}.desktop usr/share/applications
 
 
 echo ""
@@ -155,10 +156,10 @@ echo ""
 echo "Creating top-level desktop and icon files, and application launcher"
 echo ""
 
-cp -a "${AI_SCRIPTS_DIR}/AppRun" . || exit 1
-cp -a /sources/scripts/helpers/apprun-helper.sh "./apprun-helper.sh" || exit 1
-get_desktop || exit 1
-get_icon || exit 1
+cp -a "${AI_SCRIPTS_DIR}/AppRun" .
+cp -a /sources/scripts/helpers/apprun-helper.sh "./apprun-helper.sh"
+get_desktop
+get_icon
 
 
 echo ""
@@ -170,7 +171,7 @@ echo ""
 # The fonts configuration should not be patched, copy back original one
 if [[ -e /usr/local/share/locale ]]; then
     mkdir -p usr/share/locale
-    cp -a "/usr/local/share/locale/"* usr/share/locale || exit 1
+    cp -a "/usr/local/share/locale/"* usr/share/locale
 fi
 
 
@@ -179,6 +180,8 @@ echo "########################################################################"
 echo ""
 echo "Run get_desktopintegration"
 echo ""
+
+set +e
 
 # desktopintegration asks the user on first run to install a menu item
 get_desktopintegration "$LOWERAPP"
@@ -193,10 +196,9 @@ cp -a "/sources/ci/$LOWERAPP.wrapper" "$APPDIR/usr/bin/$LOWERAPP.wrapper"
 cp "$(ldconfig -p | grep libgdk-x11-2.0.so.0 | cut -d ">" -f 2 | xargs)" ./usr/lib/
 cp "$(ldconfig -p | grep libgtk-x11-2.0.so.0 | cut -d ">" -f 2 | xargs)" ./usr/lib/
 
+set -e
 
-(cd /sources/scripts/helpers/appimage-exec-wrapper2 && make && cp -a exec.so "$APPDIR/usr/lib/exec_wrapper2.so") || exit 1
-
-
+(cd /sources/scripts/helpers/appimage-exec-wrapper2 && make && cp -a exec.so "$APPDIR/usr/lib/exec_wrapper2.so")
 
 echo ""
 echo "########################################################################"

@@ -16,15 +16,17 @@ export LANGUAGE="en_US:en"
 export LC_ALL="en_US.UTF-8"
 
 
+set -e
+
 # Add some required packages
-(yum update -y && yum install -y epel-release) || exit 1
-yum install -y https://centos7.iuscommunity.org/ius-release.rpm #|| exit 1
-yum install -y centos-release-scl || exit 1
+(yum update -y && yum install -y epel-release)
+yum install -y https://centos7.iuscommunity.org/ius-release.rpm
+yum install -y centos-release-scl
 yum install -y intltool make git swig python-setuptools gettext gcc-c++ \
   python-devel numpy \
   gtk3-devel pygobject3-devel librsvg2-devel \
   libpng-devel lcms2-devel json-c-devel \
-  gtk3 gobject-introspection || exit 1
+  gtk3 gobject-introspection
 
 # Optimize compiler flags for better perf
 # These are pretty generic, ideally one would compile for own native arch
@@ -32,19 +34,19 @@ yum install -y intltool make git swig python-setuptools gettext gcc-c++ \
 # several binary packages.
 export CFLAGS='-Ofast -ftree-vectorize -fopt-info-vec-optimized -funsafe-math-optimizations -funsafe-loop-optimizations'
 
-cd /sources/libmypaint || exit 1
-./autogen.sh --prefix=/usr/local || exit 1
-./configure --prefix=/usr/local || exit 1
-make install || exit 1
+cd /sources/libmypaint
+./autogen.sh --prefix=/usr/local
+./configure --prefix=/usr/local
+make install
 
 
-cd /sources/mypaint-brushes || exit 1
-./autogen.sh --prefix=/usr/local || exit 1
-./configure --prefix=/usr/local || exit 1
-make install || exit 1
+cd /sources/mypaint-brushes
+./autogen.sh --prefix=/usr/local
+./configure --prefix=/usr/local
+make install
 
 
-cd /sources/mypaint || exit 1
+cd /sources/mypaint
 python setup.py build_config \
        --brushdir-path="{installation-prefix}/share/mypaint-data/2.0/brushes" \
        install --prefix=/usr/local
@@ -61,7 +63,7 @@ echo "Install Hicolor and Adwaita icon themes"
 (cd /work && rm -rf hicolor-icon-theme-0.* && \
 wget http://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.17.tar.xz && \
 tar xJf hicolor-icon-theme-0.17.tar.xz && cd hicolor-icon-theme-0.17 && \
-./configure --prefix=/usr/local && make install && rm -rf hicolor-icon-theme-0.*) || exit 1
+./configure --prefix=/usr/local && make install && rm -rf hicolor-icon-theme-0.*)
 echo "icons after hicolor installation:"
 ls /${PREFIX}/share/icons
 echo ""
@@ -69,7 +71,7 @@ echo ""
 (cd /work && rm -rf adwaita-icon-theme-3.* && \
 wget http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.26/adwaita-icon-theme-3.26.0.tar.xz && \
 tar xJf adwaita-icon-theme-3.26.0.tar.xz && cd adwaita-icon-theme-3.26.0 && \
-./configure --prefix=/usr/local && make install && rm -rf adwaita-icon-theme-3.26.0*) || exit 1
+./configure --prefix=/usr/local && make install && rm -rf adwaita-icon-theme-3.26.0*)
 echo "icons after adwaita installation:"
 ls /${PREFIX}/share/icons
 echo ""
