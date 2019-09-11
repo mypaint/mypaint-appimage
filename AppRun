@@ -36,6 +36,26 @@ fi
 
 run_hooks
 
+# Set Adwaita theme explicitly, but allow it to be overridden
+# by setting GTK_THEME when starting the appimage, in which
+# case it is up to the user to set light or dark themes directly.
+#
+# Setting the theme explicitly avoids css-compatibility
+# problems with older gtk3 versions on the host systems.
+if [ -z "$GTK_THEME" ]; then
+    echo "No explicit user theme set"
+    # Helper returns 0 for dark theme, 1 for ordinary theme.
+    # Set the path to let it find the required mypaint libs.
+    PP="$APPDIR/usr/lib/mypaint/:$PYTHONPATH"
+    if PYTHONPATH="$PP" python "$APPDIR/gtk-theme-helper.py" "$@"; then
+	export GTK_THEME="Adwaita:dark"
+    else
+	export GTK_THEME="Adwaita"
+    fi
+else
+    echo "GTK_THEME already set explicitly, we respect that."
+fi
+
 python $DIR/usr/bin/mypaint "$@"
 
 rm -rf "$AILIBDIR"

@@ -158,6 +158,7 @@ echo ""
 
 cp -a "${AI_SCRIPTS_DIR}/AppRun" .
 cp -a /sources/scripts/helpers/apprun-helper.sh "./apprun-helper.sh"
+cp -a /sources/scripts/helpers/gtk-theme-helper.py "./gtk-theme-helper.py"
 get_desktop
 get_icon
 
