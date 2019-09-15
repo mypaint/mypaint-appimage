@@ -15,18 +15,7 @@ export LANG="en_US.UTF-8"
 export LANGUAGE="en_US:en"
 export LC_ALL="en_US.UTF-8"
 
-
 set -e
-
-# Add some required packages
-(yum update -y && yum install -y epel-release)
-yum install -y https://centos7.iuscommunity.org/ius-release.rpm
-yum install -y centos-release-scl
-yum install -y intltool make git swig python-setuptools gettext gcc-c++ \
-  python-devel numpy \
-  gtk3-devel pygobject3-devel librsvg2-devel \
-  libpng-devel lcms2-devel json-c-devel \
-  gtk3 gobject-introspection
 
 # Optimize compiler flags for better perf
 # These are pretty generic, ideally one would compile for own native arch

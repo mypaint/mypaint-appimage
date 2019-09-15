@@ -4,7 +4,6 @@ set -e
 
 export APP=MyPaint
 
-(yum update -y && yum install -y git wget file)
 mkdir -p /work
 export AI_SCRIPTS_DIR="/sources"
 export APPROOT=/work/appimage
