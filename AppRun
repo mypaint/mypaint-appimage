@@ -56,6 +56,10 @@ else
     echo "GTK_THEME already set explicitly, we respect that."
 fi
 
+# Set GTK_LOCALEDIR so our patched version of libgtk can
+# pick up the bundled .mo files
+export GTK_LOCALEDIR=$APPDIR/usr/share/locale
+
 python $DIR/usr/bin/mypaint "$@"
 
 rm -rf "$AILIBDIR"

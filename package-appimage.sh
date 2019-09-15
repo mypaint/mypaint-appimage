@@ -176,6 +176,35 @@ if [[ -e /usr/local/share/locale ]]; then
 fi
 
 
+# Use patched version of gtk so that gtk locale messages can be bundled
+echo ""
+echo "########################################################################"
+echo ""
+echo "Replace libgtk with patched version and bundle locales"
+
+cd "$WORK_DIR"
+rurl="https://github.com/jplloyd/mypaint-appimage/releases/download/aux_files"
+aux_bundle_url="${rurl}/gtk3.22.30-mypaint-appimage-files.tar.gz"
+wget "$aux_bundle_url" -O gtk-data.tar.gz
+tar xf gtk-data.tar.gz
+cp -a lib/libgtk* -t "${APPDIR}/usr/lib/"
+
+# Copy gtk translation packages (message objects)
+loc_dir="${APPDIR}/usr/share/locale"
+for loc in "$loc_dir"/*
+do
+    locale="$(basename $loc)"
+    echo "Copying locale: ${locale}"
+    if [ -e po/$locale.gmo ]; then
+	target=$loc/LC_MESSAGES
+	mv po/$locale.gmo $target/gtk30.mo
+	mv properties/$locale.gmo $target/gtk30-properties.mo
+    else
+	echo "Warning: no gtk messages found, wrong locale code ($locale)?"
+    fi
+done
+
+
 echo ""
 echo "########################################################################"
 echo ""
