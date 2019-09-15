@@ -10,7 +10,7 @@ export APPROOT=/work/appimage
 
 mkdir -p "$APPROOT/scripts"
 cp -a /sources/scripts/helpers/bundle-python.sh "$APPROOT/scripts"
-cp -a /sources/scripts/helpers/bundle-gtk2.sh "$APPROOT/scripts"
+cp -a /sources/scripts/helpers/bundle-gtk3.sh "$APPROOT/scripts"
 
 DO_BUILD=0
 if [ ! -e /work/build.done ]; then DO_BUILD=1; fi
