@@ -1,24 +1,24 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 set -e
 
 export APP=MyPaint
 
-mkdir -p /work
 export AI_SCRIPTS_DIR="/sources"
-export APPROOT=/work/appimage
+export WORK_DIR="$(mktemp -d)"
+export APPROOT=$WORK_DIR/appimage
 
 mkdir -p "$APPROOT/scripts"
 cp -a /sources/scripts/helpers/bundle-python.sh "$APPROOT/scripts"
 cp -a /sources/scripts/helpers/bundle-gtk3.sh "$APPROOT/scripts"
 
 DO_BUILD=0
-if [ ! -e /work/build.done ]; then DO_BUILD=1; fi
+if [ ! -e $WORK_DIR/build.done ]; then DO_BUILD=1; fi
 if [ x"$DO_BUILD" = "x1" ]; then
-	bash /sources/build-appimage.sh
+    /sources/build-appimage.sh
 fi
 
-bash /sources/package-appimage.sh
+/sources/package-appimage.sh
 
 if [ -n "$USERID" ]; then
     chown -R "$USERID:$USERID" /sources/out/

@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 # Set environment variables to allow finding the dependencies that are
 # compiled from sources
@@ -35,4 +35,4 @@ python setup.py build_config \
        --brushdir-path="{installation-prefix}/share/mypaint-data/2.0/brushes" \
        install --prefix=/usr/local
 
-touch /work/build.done
+touch $WORK_DIR/build.done
