@@ -20,3 +20,7 @@ if [ x"$DO_BUILD" = "x1" ]; then
 fi
 
 bash /sources/package-appimage.sh
+
+if [ -n "$USERID" ]; then
+    chown -R "$USERID:$USERID" /sources/out/
+fi

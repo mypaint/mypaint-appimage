@@ -42,5 +42,7 @@ function check_prerequisites
 check_prerequisites mypaint libmypaint mypaint-brushes
 
 # If the check passes, start the appimage build in a docker container
-docker run -it -v ${SCRIPTDIR}:/sources "$DOCKER_IMAGE" "sources/$APPIM_INIT_SCRIPT"
-
+# Pass in the USER envvar for convenience when building images locally,
+# so that permissions don't have to be updated after each build.
+docker run -it -eUSERID=$(id -u) -v ${SCRIPTDIR}:/sources \
+       "$DOCKER_IMAGE" "sources/$APPIM_INIT_SCRIPT"
