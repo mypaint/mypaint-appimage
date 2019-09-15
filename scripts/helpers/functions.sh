@@ -255,10 +255,8 @@ get_desktopintegration()
 strip_binaries()
 {
   chmod u+w -R "$APPDIR"
-  {
-    find $APPDIR/usr -type f -name "rawtherapee*" -print0
-    find "$APPDIR" -type f -regex '.*\.so\(\.[0-9.]+\)?$' -print0
-  } | xargs -0 --no-run-if-empty --verbose -n1 strip
+  find "$APPDIR" -type f -regex '.*\.so\(\.[0-9.]+\)?$' -print0 |
+      xargs -0 --no-run-if-empty --verbose -n1 strip
 }
 
 
