@@ -142,12 +142,27 @@ echo "########################################################################"
 echo ""
 echo "Copy desktop file and application icon"
 
-# Copy hicolor icon theme
+# Copy hicolor icon theme (mypaint only)
 mkdir -p usr/share/icons
 echo "cp -r \"/usr/local/share/icons/\"* \"usr/share/icons\""
 cp -r "/usr/local/share/icons/"* "usr/share/icons"
 mkdir -p usr/share/applications
 cp /usr/local/share/applications/${LOWERAPP}.desktop usr/share/applications
+
+echo ""
+echo "########################################################################"
+echo ""
+echo "Copy the subset of Adwaita icons we need"
+
+adwaita_dir="/usr/share/icons/Adwaita"
+mkdir -p "$APPDIR/$adwaita_dir"
+cp -rat "$APPDIR/$adwaita_dir" \
+   $adwaita_dir/scalable $adwaita_dir/index.theme
+scl_dir="$APPDIR/$adwaita_dir/scalable/"
+# Most of the icons don't need to be bundled. Adjust the list of
+# removed directories below, if something turns out to be missing.
+( cd $scl_dir; rm -r apps categories emblems emotes devices mimetypes status )
+gtk-update-icon-cache "$APPDIR/$adwaita_dir"
 
 
 echo ""
