@@ -11,10 +11,10 @@ echo ""
 echo "AppImage configuration:"
 echo "  APP: \"$APP\""
 echo "  LOWERAPP: \"$LOWERAPP\""
-echo "  AI_SCRIPTS_DIR: \"${AI_SCRIPTS_DIR}\""
+echo "  APPIM_SOURCES: \"${APPIM_SOURCES}\""
 echo ""
 
-source /sources/scripts/helpers/functions.sh
+source "$APPIM_SOURCES/scripts/helpers/functions.sh"
 
 
 #locale-gen en_US.UTF-8
@@ -28,7 +28,7 @@ echo "########################################################################"
 echo ""
 echo "Creating and cleaning AppImage folder"
 
-cp /sources/scripts/helpers/excludelist "$APPROOT/excludelist"
+cp "$APPIM_SOURCES/scripts/helpers/excludelist" "$APPROOT/excludelist"
 
 # Remove old AppDir structure (if existing)
 export APPDIR="${APPROOT}/${APP}.AppDir"
@@ -171,9 +171,10 @@ echo ""
 echo "Creating top-level desktop and icon files, and application launcher"
 echo ""
 
-cp -a "${AI_SCRIPTS_DIR}/AppRun" .
-cp -a /sources/scripts/helpers/apprun-helper.sh "./apprun-helper.sh"
-cp -a /sources/scripts/helpers/gtk-theme-helper.py "./gtk-theme-helper.py"
+cp -a -t . \
+   "$APPIM_SOURCES/AppRun" \
+   "$APPIM_SOURCES/scripts/helpers/apprun-helper.sh" \
+   "$APPIM_SOURCES/scripts/helpers/gtk-theme-helper.py"
 get_desktop
 get_icon
 
@@ -230,7 +231,7 @@ set +e
 
 # desktopintegration asks the user on first run to install a menu item
 get_desktopintegration "$LOWERAPP"
-cp -a "/sources/ci/$LOWERAPP.wrapper" "$APPDIR/usr/bin/$LOWERAPP.wrapper"
+cp -a "$APPIM_SOURCES/ci/$LOWERAPP.wrapper" "$APPDIR/usr/bin/$LOWERAPP.wrapper"
 
 #DESKTOP_NAME=$(cat "$APPDIR/$LOWERAPP.desktop" | grep "^Name=.*")
 #sed -i -e "s|${DESKTOP_NAME}|${DESKTOP_NAME} (AppImage)|g" "$APPDIR/$LOWERAPP.desktop"
@@ -243,7 +244,7 @@ cp "$(ldconfig -p | grep libgtk-x11-2.0.so.0 | cut -d ">" -f 2 | xargs)" ./usr/l
 
 set -e
 
-(cd /sources/scripts/helpers/appimage-exec-wrapper2 && make && cp -a exec.so "$APPDIR/usr/lib/exec_wrapper2.so")
+(cd "$APPIM_SOURCES/scripts/helpers/appimage-exec-wrapper2" && make && cp -a exec.so "$APPDIR/usr/lib/exec_wrapper2.so")
 
 echo ""
 echo "########################################################################"
@@ -254,7 +255,7 @@ echo ""
 # Strip binaries.
 strip_binaries
 
-export GIT_DESCRIBE=$(cd /sources/mypaint && git describe --tags)
+export GIT_DESCRIBE=$(cd "$APPIM_SOURCES/mypaint" && git describe --tags)
 echo "GIT_DESCRIBE: ${GIT_DESCRIBE}"
 
 cd "$APPROOT"
@@ -275,7 +276,7 @@ generate_type2_appimage
 
 APPIM_FILE_NAME="${APP}-${VERSION_FULL}.AppImage"
 
-mkdir -p /sources/out
-cp ../out/*.AppImage "/sources/out/${APPIM_FILE_NAME}"
-cd /sources/out
+mkdir -p "$APPIM_SOURCES/out"
+cp ../out/*.AppImage "$APPIM_SOURCES/out/${APPIM_FILE_NAME}"
+cd "$APPIM_SOURCES/out"
 sha256sum "${APPIM_FILE_NAME}" > "${APPIM_FILE_NAME}".sha256sum

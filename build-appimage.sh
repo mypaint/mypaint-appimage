@@ -18,19 +18,19 @@ set -e
 # several binary packages.
 export CFLAGS='-Ofast -ftree-vectorize -fopt-info-vec-optimized -funsafe-math-optimizations -funsafe-loop-optimizations'
 
-cd /sources/libmypaint
+cd "$APPIM_SOURCES/libmypaint"
 ./autogen.sh --prefix=/usr/local
 ./configure --prefix=/usr/local
 make install
 
 
-cd /sources/mypaint-brushes
+cd "$APPIM_SOURCES/mypaint-brushes"
 ./autogen.sh --prefix=/usr/local
 ./configure --prefix=/usr/local
 make install
 
 
-cd /sources/mypaint
+cd "$APPIM_SOURCES/mypaint"
 python setup.py build_config \
        --brushdir-path="{installation-prefix}/share/mypaint-data/2.0/brushes" \
        install --prefix=/usr/local
