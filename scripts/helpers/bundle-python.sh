@@ -33,8 +33,8 @@ fi
 
 mkdir -p "$APPDIR/usr/lib64"
 cd "$APPDIR/usr/lib64"
-rm -rf python${PYTHON_VERSION}
-ln -s ../lib/python${PYTHON_VERSION} .
+rm -rf python"${PYTHON_VERSION}"
+ln -s ../lib/python"${PYTHON_VERSION}" .
 cd -
 
 gssapilib=$(ldconfig -p | grep 'libgssapi_krb5.so.2 (libc6,x86-64)'| awk 'NR==1{print $NF}')

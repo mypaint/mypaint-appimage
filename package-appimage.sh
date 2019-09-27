@@ -42,9 +42,9 @@ mkdir -p "$APPDIR/usr/bin"
 mkdir -p "$APPDIR/usr/lib"
 mkdir -p "$APPDIR/usr/share"
 
-cp -a /usr/local/bin/$LOWERAPP "$APPDIR/usr/bin"
-cp -a /usr/local/lib/*${LOWERAPP}* "$APPDIR/usr/lib"
-cp -a /usr/local/share/*${LOWERAPP}* "$APPDIR/usr/share"
+cp -a "/usr/local/bin/$LOWERAPP" "$APPDIR/usr/bin"
+cp -a /usr/local/lib/*"${LOWERAPP}"* "$APPDIR/usr/lib"
+cp -a /usr/local/share/*"${LOWERAPP}"* "$APPDIR/usr/share"
 
 # Not all distros have the strings utility in the base install
 # Used at startup to check whether to use bundled or installed libs
@@ -71,8 +71,6 @@ cd "$APPDIR"
 copy_deps2; copy_deps2; copy_deps2;
 
 
-
-if [ "x" = "x" ]; then
 echo ""
 echo "########################################################################"
 echo ""
@@ -82,14 +80,12 @@ echo ""
 # Copy MIME files
 mkdir -p usr/share/image
 cp -a /usr/share/mime/image/x-*.xml usr/share/image
-fi
-
 
 
 echo ""
 echo "########################################################################"
 echo ""
-echo 'Move all libraries into $APPDIR/usr/lib'
+echo "Move all libraries into $APPDIR/usr/lib"
 echo ""
 
 # Move all libraries into $APPDIR/usr/lib
@@ -147,7 +143,7 @@ mkdir -p usr/share/icons
 echo "cp -r \"/usr/local/share/icons/\"* \"usr/share/icons\""
 cp -r "/usr/local/share/icons/"* "usr/share/icons"
 mkdir -p usr/share/applications
-cp /usr/local/share/applications/${LOWERAPP}.desktop usr/share/applications
+cp /usr/local/share/applications/"${LOWERAPP}".desktop usr/share/applications
 
 echo ""
 echo "########################################################################"
@@ -161,7 +157,7 @@ cp -rat "$APPDIR/$adwaita_dir" \
 scl_dir="$APPDIR/$adwaita_dir/scalable/"
 # Most of the icons don't need to be bundled. Adjust the list of
 # removed directories below, if something turns out to be missing.
-( cd $scl_dir; rm -r apps categories emblems emotes devices mimetypes status )
+( cd "$scl_dir"; rm -r apps categories emblems emotes devices mimetypes status )
 gtk-update-icon-cache "$APPDIR/$adwaita_dir"
 
 
@@ -209,12 +205,12 @@ cp -a lib/libgtk* -t "${APPDIR}/usr/lib/"
 loc_dir="${APPDIR}/usr/share/locale"
 for loc in "$loc_dir"/*
 do
-    locale="$(basename $loc)"
+    locale="$(basename "$loc")"
     echo "Copying locale: ${locale}"
-    if [ -e po/$locale.gmo ]; then
+    if [ -e po/"$locale".gmo ]; then
 	target=$loc/LC_MESSAGES
-	mv po/$locale.gmo $target/gtk30.mo
-	mv properties/$locale.gmo $target/gtk30-properties.mo
+	mv po/"$locale".gmo "$target"/gtk30.mo
+	mv properties/"$locale".gmo "$target"/gtk30-properties.mo
     else
 	echo "Warning: no gtk messages found, wrong locale code ($locale)?"
     fi
@@ -255,13 +251,15 @@ echo ""
 # Strip binaries.
 strip_binaries
 
-export GIT_DESCRIBE=$(cd "$APPIM_SOURCES/mypaint" && git describe --tags)
+GIT_DESCRIBE=$(cd "$APPIM_SOURCES/mypaint" && git describe --tags)
+export GIT_DESCRIBE
 echo "GIT_DESCRIBE: ${GIT_DESCRIBE}"
 
 cd "$APPROOT"
 export ARCH="x86_64"
 export VERSION="${GIT_DESCRIBE}"
-export VERSION_FULL="${GIT_DESCRIBE}-$(date '+%Y-%m-%d_%H:%M')"
+VERSION_FULL="${GIT_DESCRIBE}-$(date '+%Y-%m-%d_%H:%M')"
+export VERSION_FULL
 echo "VERSION:  $VERSION"
 echo "VERSION_FULL: $VERSION_FULL"
 

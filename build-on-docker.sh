@@ -2,7 +2,7 @@
 
 set -e
 
-SCRIPTDIR=$(dirname $(readlink -f "$0"))
+SCRIPTDIR=$(dirname "$(readlink -f "$0")")
 APPIM_INIT_SCRIPT="mkappimage.sh"
 
 # If provided, the first argument should be the name
@@ -16,7 +16,7 @@ function check_prerequisites
 {
     local FAILED=0
     local GH_LOC="https://github.com/mypaint"
-    for dir in $@; do
+    for dir in "$@"; do
 	# If the repo directory is not present: issue warning, set failure flag
         if [ ! -e "$SCRIPTDIR/$dir" ]; then
 	    echo "============================================================"
@@ -24,7 +24,7 @@ function check_prerequisites
 	    # Make the command easier to copy/paste by making it a
 	    # one-liner even when running from another directory
 	    local DST=""
-	    if [ "$(readlink -f $(pwd))" != "$SCRIPTDIR" ]; then
+	    if [ "$(readlink -f "$(pwd)")" != "$SCRIPTDIR" ]; then
 		DST=" $SCRIPTDIR/$dir"
 	    fi
 	    echo "git clone --depth=1 $GH_LOC/$dir"".git""$DST"
@@ -44,5 +44,5 @@ check_prerequisites mypaint libmypaint mypaint-brushes
 # If the check passes, start the appimage build in a docker container
 # Pass in the USER envvar for convenience when building images locally,
 # so that permissions don't have to be updated after each build.
-docker run -it -eUSERID=$(id -u) -v ${SCRIPTDIR}:/sources \
+docker run -it -eUSERID="$(id -u)" -v "${SCRIPTDIR}:/sources" \
        "$DOCKER_IMAGE" "sources/$APPIM_INIT_SCRIPT"

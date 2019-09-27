@@ -13,13 +13,13 @@ make_temp_libdir() {
 
 
 link_libraries() {
-	ln -s "$APPDIR/usr/lib"/*.so* "$AILIBDIR"
+    ln -s "$APPDIR/usr/lib"/*.so* "$AILIBDIR"
 }
 
 
 fix_libxcb_dri3() {
 	libxcbdri3="$(/sbin/ldconfig -p | grep 'libxcb-dri3.so.0 (libc6,x86-64'| awk 'NR==1{print $NF}')"
-	temp="$(strings $libxcbdri3 | grep xcb_dri3_get_supported_modifiers)"
+	temp="$(strings "$libxcbdri3" | grep xcb_dri3_get_supported_modifiers)"
 	if [ -n "$temp" ]; then
 		echo "deleting $AILIBDIR/libxcb-dri3.so*"
 		rm -f "$AILIBDIR"/libxcb-dri3.so*
@@ -37,7 +37,7 @@ stdcxxver2=$(strings "$APPDIR/usr/optional/libstdc++/libstdc++.so.6" | grep '^GL
 echo "Bundled stdc++ library version: \"$stdcxxver2\""
 stdcxxnewest=$(echo "$stdcxxver1 $stdcxxver2" | tr " " "\n" | sort -V | tail -n 1)
 echo "Newest stdc++ library version: \"$stdcxxnewest\""
-if [[ x"$stdcxxnewest" = x"$stdcxxver1" ]]; then
+if [ "$stdcxxnewest" = "$stdcxxver1" ]; then
    	echo "Using system stdc++ library"
 else
    	echo "Using bundled stdc++ library"
@@ -46,7 +46,7 @@ fi
 
 atomiclib="$(/sbin/ldconfig -p | grep 'libatomic.so.1 (libc6,x86-64)'| awk 'NR==1{print $NF}')"
 echo "atomiclib: $atomiclib"
-if [[ x"$atomiclib" = "x" ]]; then
+if [ "$atomiclib" = "x" ]; then
 	echo "Using bundled atomic library"
 	ln -s "$APPDIR/usr/optional/libstdc++"/libatomic.so* "$AILIBDIR"
 fi
@@ -60,7 +60,7 @@ if [ -n "$fclib" ]; then
         fclib=$(readlink -f "$fclib")
         fcv=$(basename "$fclib" | tail -c +18)
 fi
-fclib2="$(ls $APPDIR/usr/optional/fontconfig/libfontconfig.so.*.*.* | head -n 1)"
+fclib2="$(find "$APPDIR"/usr/optional/fontconfig/ -name "libfontconfig.so.*.*.*" | head -n 1)"
 if [ -n "$fclib2" ]; then
         fclib2=$(readlink -f "$fclib2")
         fcv2=$(basename "$fclib2" | tail -c +18)
@@ -72,11 +72,10 @@ if [ x"$fclib" = "x" ]; then
    export FONTCONFIG_PATH="$APPDIR/usr/etc/fonts/fonts.conf"
 fi
 if [ x"$fclib" != "x" -a x"$fclib2" != "x" ]; then
-   echo "echo \"$fcv $fcv2\" | tr \" \" \"\n\" | sort -V | tail -n 1"
    fcvnewest=$(echo "$fcv $fcv2" | tr " " "\n" | sort -V | tail -n 1)
 
    echo "Newest fontconfig library version: \"$fcvnewest\""
-   if [[ x"$fcvnewest" = x"$fcv" ]]; then
+   if [ "$fcvnewest" = "$fcv" ]; then
       echo "Using system fontconfig library"
       rm -f "$AILIBDIR"/libfontconfig*.so*
    else
@@ -128,7 +127,7 @@ fix_library() {
 run_hooks()
 {
   for h in "$APPDIR/startup_scripts"/*.sh; do
-    source "$h"
+    . "$h"
   done
 }
 
@@ -138,9 +137,7 @@ init_environment()
 export APPDIRS=$APPDIR:$APPDIRS
 export PATH="$APPDIR/usr/bin:${PATH}:/sbin:/usr/sbin"
 export LD_LIBRARY_PATH="$AILIBDIR:/usr/lib:$LD_LIBRARY_PATH"
-#export XDG_DATA_DIRS="${APPDIR}/usr/share/:${APPDIR}/usr/share/mime/:${XDG_DATA_DIRS}"
 export XDG_DATA_DIRS="${APPDIR}/usr/share/:${XDG_DATA_DIRS}:/usr/local/share/:/usr/share/"
-export ZENITY_DATA_DIR="$APPDIR/usr/share/zenity"
 export GCONV_PATH="${APPDIR}/usr/lib/gconv"
 }
 
@@ -173,20 +170,4 @@ echo "GTK_IM_MODULE_FILE=${GTK_IM_MODULE_FILE}"
 
 export PANGO_LIBDIR="$APPDIR/usr/lib"
 echo "PANGO_LIBDIR=${PANGO_LIBDIR}"
-}
-
-
-check_updates()
-{
-	REPO_SLUG="$1"
-	RELEASE_TAG="$2"
-	RELEASE_ID=$(curl -XGET "https://api.github.com/repos/${REPO_SLUG}/releases/tags/${RELEASE_TAG}" |  grep '"id":' | head -n 1 | tr -s ' ' | cut -d':' -f 2 | tr -d ' ' | cut -d',' -f 1)
-	
-	RELEASE_ASSETS=$(curl -XGET "https://api.github.com/repos/${REPO_SLUG}/releases/${RELEASE_ID}/assets")
-	ASSETS_IDS=$(echo "$RELEASE_ASSETS" | grep '"id":')
-	NASSETS=$(echo "$ASSETS_IDS" | wc -l)
-	
-	for AID in $(seq 1 2 $NASSETS); do
-		ID=$(echo "$ASSETS_IDS" | sed -n ${AID}p | tr -s " " | cut -f 3 -d" " | cut -f 1 -d ",")
-	done
 }

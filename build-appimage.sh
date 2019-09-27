@@ -35,4 +35,4 @@ python setup.py build_config \
        --brushdir-path="{installation-prefix}/share/mypaint-data/2.0/brushes" \
        install --prefix=/usr/local
 
-touch $WORK_DIR/build.done
+touch "$WORK_DIR"/build.done

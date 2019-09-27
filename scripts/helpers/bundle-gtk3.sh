@@ -22,7 +22,7 @@ echo "========= compile Glib schemas ========="
 # Compile Glib schemas
 glib_prefix="$(pkg-config --variable=prefix glib-2.0)"
 mkdir -p "$APPDIR/usr/share/glib-2.0/schemas/"
-cp -a ${glib_prefix}/share/glib-2.0/schemas/* "$APPDIR/usr/share/glib-2.0/schemas"
+cp -a "${glib_prefix}"/share/glib-2.0/schemas/* "$APPDIR/usr/share/glib-2.0/schemas"
 cd "$APPDIR/usr/share/glib-2.0/schemas/"
 glib-compile-schemas .
 cd -
