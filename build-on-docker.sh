@@ -3,7 +3,7 @@
 set -e
 
 SCRIPTDIR=$(dirname "$(readlink -f "$0")")
-APPIM_INIT_SCRIPT="mkappimage.sh"
+APPIM_INIT_SCRIPT="scripts/mkappimage.sh"
 
 # If provided, the first argument should be the name
 # of the docker image that the build will be run on

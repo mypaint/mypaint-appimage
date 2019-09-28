@@ -20,7 +20,7 @@ before_script:
   - travis_wait 20 # 20 minutes should be plenty to pull the docker image
     sudo docker pull mypaint/appimage-base:1.0.0
   - sudo docker run -t -v $(pwd):/sources -e "GIT_BRANCH=master"
-    mypaint/appimage-base:1.0.0 bash /sources/mkappimage.sh
+    mypaint/appimage-base:1.0.0 bash /sources/scripts/mkappimage.sh
 
 after_success:
     - cd $TRAVIS_BUILD_DIR
