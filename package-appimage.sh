@@ -217,22 +217,6 @@ do
 done
 
 
-echo ""
-echo "########################################################################"
-echo ""
-echo "Run get_desktopintegration"
-echo ""
-
-set +e
-
-# desktopintegration asks the user on first run to install a menu item
-get_desktopintegration "$LOWERAPP"
-cp -a "$APPIM_SOURCES/ci/$LOWERAPP.wrapper" "$APPDIR/usr/bin/$LOWERAPP.wrapper"
-
-#DESKTOP_NAME=$(cat "$APPDIR/$LOWERAPP.desktop" | grep "^Name=.*")
-#sed -i -e "s|${DESKTOP_NAME}|${DESKTOP_NAME} (AppImage)|g" "$APPDIR/$LOWERAPP.desktop"
-
-
 # Workaround for:
 # ImportError: /usr/lib/x86_64-linux-gnu/libgdk-x11-2.0.so.0: undefined symbol: XRRGetMonitors
 cp "$(ldconfig -p | grep libgdk-x11-2.0.so.0 | cut -d ">" -f 2 | xargs)" ./usr/lib/
