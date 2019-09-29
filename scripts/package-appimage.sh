@@ -216,15 +216,12 @@ do
     fi
 done
 
-
-# Workaround for:
-# ImportError: /usr/lib/x86_64-linux-gnu/libgdk-x11-2.0.so.0: undefined symbol: XRRGetMonitors
-cp "$(ldconfig -p | grep libgdk-x11-2.0.so.0 | cut -d ">" -f 2 | xargs)" ./usr/lib/
-cp "$(ldconfig -p | grep libgtk-x11-2.0.so.0 | cut -d ">" -f 2 | xargs)" ./usr/lib/
-
-set -e
-
-(cd "$APPIM_SOURCES/scripts/helpers/appimage-exec-wrapper2" && make && cp -a exec.so "$APPDIR/usr/lib/exec_wrapper2.so")
+(
+    set +e
+    cd "$APPIM_SOURCES/scripts/helpers/appimage-exec-wrapper2";
+    make && cp -a exec.so "$APPDIR/usr/lib/exec_wrapper2.so"
+    true
+)
 
 echo ""
 echo "########################################################################"
