@@ -1,6 +1,6 @@
 language: generic
 os: linux
-dist: trusty
+dist: xenial
 compiler: g++
 sudo: required
 services: docker
@@ -9,27 +9,37 @@ git:
   quiet: true
   depth: 1
 
+addons:
+  apt:
+    packages:
+      python3
+      python3-pip
+
+install:
+  - pip3 install requests
+
 before_script:
-  - python scripts/outputstreams_set_blocking.py
+  - python --version
+  - python3 --version
   - git clone https://github.com/mypaint/mypaint.git
   - git clone https://github.com/mypaint/libmypaint.git
   - git clone https://github.com/mypaint/mypaint-brushes.git
-  - 'if [ -e travis.cancel ]; then
-        exit 0;
-    fi'
-  - travis_wait 20 # 20 minutes should be plenty to pull the docker image
+  - # 20 minutes should be plenty to pull the docker image
+  - travis_wait 20
     sudo docker pull mypaint/appimage-base:1.0.0
-  - sudo docker run -t -v $(pwd):/sources -e "GIT_BRANCH=master"
-    mypaint/appimage-base:1.0.0 bash /sources/scripts/mkappimage.sh
+
+script:
+  - sudo docker run -t -v $(pwd):/sources mypaint/appimage-base:1.0.0
+    bash /sources/scripts/mkappimage.sh
 
 after_success:
     - cd $TRAVIS_BUILD_DIR
-    - ls -lh out/* # Assuming you have some files in out/ that you would like to upload
-    - wget -c https://github.com/aferrero2707/uploadtool/raw/master/upload_rotate.sh
-    - bash  ./upload_rotate.sh "continuous" out/* >& /dev/null
+    - ls -lh out/*
+    - bash ./scripts/upload.sh out/*
 
 branches:
   except:
     - # Do not build tags that we create when we upload to GitHub Releases
     - /^(?i:continuous)$/
+    - /^(?i:continuous-rotating)$/
 
