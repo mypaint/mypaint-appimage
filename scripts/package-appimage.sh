@@ -197,7 +197,7 @@ echo "Replace libgtk with patched version and bundle locales"
 cd "$WORK_DIR"
 rurl="https://github.com/jplloyd/mypaint-appimage/releases/download/aux_files"
 aux_bundle_url="${rurl}/gtk3.22.30-mypaint-appimage-files.tar.gz"
-wget "$aux_bundle_url" -O gtk-data.tar.gz
+wget --no-verbose "$aux_bundle_url" -O gtk-data.tar.gz
 tar xf gtk-data.tar.gz
 cp -a lib/libgtk* -t "${APPDIR}/usr/lib/"
 
@@ -244,11 +244,19 @@ export VERSION_FULL
 echo "VERSION:  $VERSION"
 echo "VERSION_FULL: $VERSION_FULL"
 
-echo "${APP}" > "$APPDIR/VERSION.txt"
-echo "${VERSION_FULL}" >> "$APPDIR/VERSION.txt"
+echo "${APP}" > "$APPDIR/version.txt"
+echo "${VERSION_FULL}" >> "$APPDIR/version.txt"
 
 export NO_GLIBC_VERSION=true
 export DOCKER_BUILD=true
+
+# Store the exact commits the build is based on.
+githash(){ git show -s --format="%H" HEAD; }
+myp_hash="mypaint: $(cd "$APPIM_SOURCES/mypaint/" && githash)"
+lib_hash="libmypaint: $(cd "$APPIM_SOURCES/libmypaint/" && githash)"
+echo "$myp_hash
+$lib_hash" > "${APPDIR}/build_source_commits.txt"
+
 
 # Generate AppImage; this expects $ARCH, $APP and $VERSION to be set
 generate_type2_appimage
