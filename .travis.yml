@@ -26,10 +26,10 @@ before_script:
   - git clone https://github.com/mypaint/mypaint-brushes.git
   - # 20 minutes should be plenty to pull the docker image
   - travis_wait 20
-    sudo docker pull mypaint/appimage-base:1.0.0
+    sudo docker pull mypaint/appimage-base:1.1.0
 
 script:
-  - sudo docker run -t -v $(pwd):/sources mypaint/appimage-base:1.0.0
+  - sudo docker run -t -v $(pwd):/sources mypaint/appimage-base:1.1.0
     bash /sources/scripts/mkappimage.sh
 
 after_success:
