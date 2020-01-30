@@ -54,11 +54,11 @@ run_hooks
 
 
 if [ -e "/usr/share/gir-1.0" ]; then
-	cp -a "/usr/share/gir-1.0" "$APPDIR/usr/share"
+    cp -a "/usr/share/gir-1.0" "$APPDIR/usr/share"
 fi
 
 if [ -e "/usr/lib64/girepository-1.0" ]; then
-	cp -a "/usr/lib64/girepository-1.0" "$APPDIR/usr/lib"
+    cp -a "/usr/lib64/girepository-1.0" "$APPDIR/usr/lib"
 fi
 
 set -e
@@ -208,11 +208,11 @@ do
     locale="$(basename "$loc")"
     echo "Copying locale: ${locale}"
     if [ -e po/"$locale".gmo ]; then
-	target=$loc/LC_MESSAGES
-	mv po/"$locale".gmo "$target"/gtk30.mo
-	mv properties/"$locale".gmo "$target"/gtk30-properties.mo
+        target=$loc/LC_MESSAGES
+        mv po/"$locale".gmo "$target"/gtk30.mo
+        mv properties/"$locale".gmo "$target"/gtk30-properties.mo
     else
-	echo "Warning: no gtk messages found, wrong locale code ($locale)?"
+        echo "Warning: no gtk messages found, wrong locale code ($locale)?"
     fi
 done
 

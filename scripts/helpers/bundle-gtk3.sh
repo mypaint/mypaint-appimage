@@ -13,7 +13,7 @@ echo "========= copying LibRSVG ========="
 mkdir -p "$APPDIR/usr/lib"
 RSVG_LIBDIR=$(pkg-config --variable=libdir librsvg-2.0)
 if [ -n "${RSVG_LIBDIR}" ]; then
-	cp -a "${RSVG_LIBDIR}"/librsvg*.so* "$APPDIR/usr/lib"
+    cp -a "${RSVG_LIBDIR}"/librsvg*.so* "$APPDIR/usr/lib"
 fi
 
 

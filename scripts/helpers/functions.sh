@@ -138,14 +138,14 @@ copy_deps2()
         else
           cp -u -v -a "$FILE" ./usr/lib
         fi
-        
+
         ROOT=$(echo "$PARENT" | cut -c 1)
         if [ x"$ROOT" != "x/" ]; then
           FILE="$DIR/$PARENT"
         else
           FILE="$PARENT"
         fi
-        
+
         #echo "  file: $FILE"
         PARENT=""
         if [[ -h "$FILE" ]]; then
@@ -166,21 +166,21 @@ copy_gcc_libs()
   echo "stdcxxlib: $stdcxxlib"
   if [ x"$stdcxxlib" != "x" ]; then
     mkdir -p usr/optional/libstdc++
-	cp -L "$stdcxxlib" usr/optional/libstdc++
+    cp -L "$stdcxxlib" usr/optional/libstdc++
   fi
 
   gomplib=$(PATH="/sbin:$PATH" ldconfig -p | grep 'libgomp.so.1' | grep 'x86-64' | awk 'NR==1{print $NF}')
   echo "gomplib: $gomplib"
   if [ x"$gomplib" != "x" ]; then
     mkdir -p usr/optional/libstdc++
-	cp -L "$gomplib" usr/optional/libstdc++
+    cp -L "$gomplib" usr/optional/libstdc++
   fi
 
   gcclib=$(PATH="/sbin:$PATH" ldconfig -p | grep 'libgcc_s.so.1' | grep 'x86-64' | awk 'NR==1{print $NF}')
   echo "gcclib: $gcclib"
   if [ x"$gcclib" != "x" ]; then
     mkdir -p usr/optional/libgcc_s
-	cp -L "$gcclib" usr/optional/libgcc_s
+    cp -L "$gcclib" usr/optional/libgcc_s
   fi
 }
 
@@ -218,7 +218,7 @@ delete_blacklisted2()
     #printf '%s\n' "APPIMAGEBASE: ${APPIMAGEBASE}"
     #ls "${APPIMAGEBASE}"
 
-	pwd
+    pwd
     while IFS= read -r line; do
         #echo "line: ${line}"
         #find . -name "${line}*"
@@ -344,12 +344,12 @@ generate_type2_appimage()
   else
     SIGN_OPT=""
     if [ ! -z "$SIGN" ]; then SIGN_OPT="-s"; fi
-    
+
     echo "generate_type2_appimage: GEN_UPDATE_ZSYNC_GITHUB=${GEN_UPDATE_ZSYNC_GITHUB}"
     if [ x"${GEN_UPDATE_ZSYNC_GITHUB}" = "x1" ]; then
       echo "AppImageTool command: \"$appimagetool\" $@ -n ${SIGN_OPT} -u \"gh-releases-zsync|${GITHUB_USER}|${GITHUB_REPO}|continuous|${APP}-${GEN_UPDATE_VERSION}-*.zsync\" -v ./$APP.AppDir/"
       VERSION=$VERSION_EXPANDED "$appimagetool" $@ -n ${SIGN_OPT} -u "gh-releases-zsync|${GITHUB_USER}|${GITHUB_REPO}|continuous|${APP}-${GEN_UPDATE_VERSION}-*.zsync" -v ./$APP.AppDir/
-    else     
+    else
       echo "AppImageTool command: \"$appimagetool\" $@ -n ${SIGN_OPT} -v ./$APP.AppDir/"
       VERSION=$VERSION_EXPANDED "$appimagetool" $@ -n ${SIGN_OPT} -v ./$APP.AppDir/
     fi
@@ -418,7 +418,7 @@ get_version()
 run_hooks()
 {
   for h in "${APPDIR}/../scripts"/*.sh; do
-  	echo ""; echo "Running hook script: \"$h\""; echo "";
+    echo ""; echo "Running hook script: \"$h\""; echo "";
     source "$h"
   done
 }
