@@ -391,12 +391,15 @@ fix_desktop() {
 # Find the icon file and copy it to the AppDir
 get_icon()
 {
-  find ./usr/share/pixmaps/$LOWERAPP.png -exec cp {} . \; 2>/dev/null || true
-  find ./usr/share/icons -path *64* -name $LOWERAPP.png -exec cp {} . \; 2>/dev/null || true
-  find ./usr/share/icons -path *128* -name $LOWERAPP.png -exec cp {} . \; 2>/dev/null || true
-  find ./usr/share/icons -path *512* -name $LOWERAPP.png -exec cp {} . \; 2>/dev/null || true
-  find ./usr/share/icons -path *256* -name $LOWERAPP.png -exec cp {} . \; 2>/dev/null || true
-  ls -lh $LOWERAPP.png || true
+  local ICON_NAME
+  ICON_NAME="org.${LOWERAPP}.${APP}"
+  find ./usr/share/pixmaps/$ICON_NAME.png -exec cp {} . \; 2>/dev/null || true
+  find ./usr/share/icons -path *64* -name $ICON_NAME.png -exec cp {} . \; 2>/dev/null || true
+  find ./usr/share/icons -path *128* -name $ICON_NAME.png -exec cp {} . \; 2>/dev/null || true
+  find ./usr/share/icons -path *512* -name $ICON_NAME.png -exec cp {} . \; 2>/dev/null || true
+  find ./usr/share/icons -path *256* -name $ICON_NAME.png -exec cp {} . \; 2>/dev/null || true
+  find ./usr/share/icons -path *scalable* -name $ICON_NAME.svg -exec cp {} . \; 2>/dev/null || true
+  ls -lh $ICON_NAME.svg || ls -lh $ICON_NAME.png || true
 }
 
 # Find out the version
