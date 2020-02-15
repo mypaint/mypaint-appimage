@@ -29,7 +29,7 @@ before_script:
     sudo docker pull mypaint/appimage-base:1.1.0
 
 script:
-  - sudo docker run -t -v $(pwd):/sources mypaint/appimage-base:1.1.0
+  - sudo docker run -t -v $(pwd):/sources mypaint/appimage-base:1.2.0
     bash /sources/scripts/mkappimage.sh
 
 after_success:
