@@ -102,14 +102,6 @@ echo ""
 # https://github.com/probonopd/AppImages/blob/master/excludelist
 delete_blacklisted2
 
-# Remove .pyc and .pyo files - prioritizing bundle size
-# over a slight increase in load times
-find "$APPDIR/usr" -name "*.py[co]" -exec rm -f {} +
-
-# Delete the tests directories in the bundled numpy
-find "$APPDIR/usr/lib" -type d -wholename "*numpy*tests*" -exec rm -rf {} +
-
-
 echo ""
 echo "########################################################################"
 echo ""
@@ -232,6 +224,29 @@ echo ""
 # Strip binaries.
 strip_binaries
 
+echo ""
+echo "########################################################################"
+echo ""
+echo "Cleaning away miscellaneous unused data"
+echo ""
+
+# Remove .pyc and .pyo files - prioritizing bundle size
+# over a slight increase in load times
+find "$APPDIR/usr" -name "*.py[co]" -exec rm -f {} +
+
+# Delete the tests directories in the bundled numpy
+find "$APPDIR/usr/lib" -type d -wholename "*numpy*tests*" -exec rm -rf {} +
+
+# Remove unused files
+find "$APPDIR/" -name "*egg-info" -or -name "*.txt" -or -name "*.h" -exec rm -rf {} +
+find "$APPDIR/" -name "*setup.py" -or -name "*setupscons.py" -exec rm -rf {} +
+
+for f in $(find "$APPDIR/usr/lib/mypaint/" -name "*.py")
+do
+pyminify --remove-literal-statements --no-convert-posargs-to-args --no-hoist-literals "$f" > /tmp/tmpf.py && mv -f /tmp/tmpf.py "$f"
+done
+
+
 GIT_DESCRIBE=$(cd "$APPIM_SOURCES/mypaint" && git describe --tags)
 export GIT_DESCRIBE
 echo "GIT_DESCRIBE: ${GIT_DESCRIBE}"
@@ -264,6 +279,22 @@ generate_type2_appimage
 APPIM_FILE_NAME="${APP}-${VERSION_FULL}.AppImage"
 
 mkdir -p "$APPIM_SOURCES/out"
-cp ../out/*.AppImage "$APPIM_SOURCES/out/${APPIM_FILE_NAME}"
-cd "$APPIM_SOURCES/out"
+mv ../out/*.AppImage "$APPIM_SOURCES/out/${APPIM_FILE_NAME}"
+pushd "$APPIM_SOURCES/out"
+sha256sum "${APPIM_FILE_NAME}" > "${APPIM_FILE_NAME}".sha256sum
+
+popd
+
+# Generate AppImage without bundled translations
+find "$APPDIR" -name "*.mo" -exec rm {} +
+echo "
+supported_locales = []
+" >> "$APPDIR"/usr/lib/mypaint/lib/config.py
+
+generate_type2_appimage
+
+APPIM_FILE_NAME="${APP}-${VERSION_FULL}-no-translations.AppImage"
+
+mv ../out/*.AppImage "$APPIM_SOURCES/out/${APPIM_FILE_NAME}"
+pushd "$APPIM_SOURCES/out"
 sha256sum "${APPIM_FILE_NAME}" > "${APPIM_FILE_NAME}".sha256sum
