@@ -274,6 +274,10 @@ $lib_hash" > "${APPDIR}/build_source_commits.txt"
 
 
 # Generate AppImage; this expects $ARCH, $APP and $VERSION to be set
+if [ -e "${APPIM_SOURCSE}/appimagetool-${SYSTEM_ARCH}.AppImage" ]
+then
+    cp "${APPIM_SOURCSE}/appimagetool-${SYSTEM_ARCH}.AppImage" ./appimagetool
+fi
 generate_type2_appimage
 
 APPIM_FILE_NAME="${APP}-${VERSION_FULL}.AppImage"
