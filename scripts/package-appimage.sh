@@ -189,7 +189,11 @@ echo "Replace libgtk with patched version and bundle locales"
 cd "$WORK_DIR"
 rurl="https://github.com/jplloyd/mypaint-appimage/releases/download/aux_files"
 aux_bundle_url="${rurl}/gtk3.22.30-mypaint-appimage-files.tar.gz"
-wget --no-verbose "$aux_bundle_url" -O gtk-data.tar.gz
+if [ -e "${APPIM_SOURCES}/gtk-data.tar.gz" ]; then
+    cp "${APPIM_SOURCES}/gtk-data.tar.gz" .
+else
+    wget --no-verbose "$aux_bundle_url" -O gtk-data.tar.gz
+fi
 tar xf gtk-data.tar.gz
 cp -a lib/libgtk* -t "${APPDIR}/usr/lib/"
 
