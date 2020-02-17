@@ -24,12 +24,6 @@ rm -rf "$APPDIR/usr/lib/python${PYTHON_VERSION}"
 mkdir -p "$APPDIR/usr/lib"
 cp -a "${PYTHON_LIBDIR}/python${PYTHON_VERSION}" "$APPDIR/usr/lib"
 
-PYGLIB_LIBDIR=$(pkg-config --variable=libdir pygobject-2.0 || true)
-if [ x"${PYGLIB_LIBDIR}" != "x" ]; then
-    cp -a "${PYGLIB_LIBDIR}"/libpyglib*.so* "$APPDIR/usr/lib"
-else
-    echo "Could not determine PYGOBJECT-2.0 library path."
-fi
 
 mkdir -p "$APPDIR/usr/lib64"
 cd "$APPDIR/usr/lib64"
@@ -37,10 +31,11 @@ rm -rf python"${PYTHON_VERSION}"
 ln -s ../lib/python"${PYTHON_VERSION}" .
 cd -
 
-gssapilib=$(ldconfig -p | grep 'libgssapi_krb5.so.2 (libc6,x86-64)'| awk 'NR==1{print $NF}')
-if [ -n "$gssapilib" ]; then
-    gssapilibdir=$(dirname "$gssapilib")
-    cp -a "$gssapilibdir"/libgssapi_krb5*.so* "$APPDIR/usr/lib"
-fi
+# Remove some stuff we don't need
+
+cd "$APPDIR/usr/lib/python${PYTHON_VERSION}/site-packages/numpy/"
+rm -f ./linalg/lapack_lite.so && touch ./linalg/lapack_lite.py
+rm -f ./core/_dotblas.so && touch ./core/_dotblas.py
+
 
 echo "Python bundling finished"
