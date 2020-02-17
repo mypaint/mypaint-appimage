@@ -306,6 +306,8 @@ generate_type2_appimage()
   #   URL=$(wget -q "https://s3.amazonaws.com/archive.travis-ci.org/jobs/$((ID+2))/log.txt" -O - | grep "https://transfer.sh/.*/appimagetool" | tail -n 1 | sed -e 's|\r||g')
   # fi
   URL="https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-${SYSTEM_ARCH}.AppImage"
+  LOCAL_TOOL="${APPIM_SOURCES}/appimagetool-${SYSTEM_ARCH}.AppImage"
+  [ -e "${LOCAL_TOOL}" ] && cp "${LOCAL_TOOL}" ./appimagetool
   [ -e appimagetool ] || wget -c "$URL" -O appimagetool
   chmod a+x ./appimagetool
   appimagetool=$(readlink -f appimagetool)
