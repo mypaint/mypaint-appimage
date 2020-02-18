@@ -251,9 +251,47 @@ echo ""
 echo "Minifying MyPaint modules"
 echo ""
 
+
+minify() {
+    local tmpfile
+    tmpfile=$(mktemp)
+    pyminify --remove-literal-statements \
+             --no-convert-posargs-to-args \
+             --no-hoist-literals \
+             "$1" > "$tmpfile" && mv -f "$tmpfile" "$1"
+}
+
+# Parallell function call (w. limited parallell jobs) code taken from:
+# https://unix.stackexchange.com/a/216475
+
+# initialize a semaphore with a given number of tokens
+open_sem(){
+    mkfifo pipe-$$
+    exec 3<>pipe-$$
+    rm pipe-$$
+    local i=$1
+    for((;i>0;i--)); do
+        printf %s 000 >&3
+    done
+}
+
+# run the given command asynchronously and pop/push tokens
+run_with_lock(){
+    local x
+    # this read waits until there is something to read
+    read -u 3 -n 3 x && ((0==x)) || exit $x
+    (
+        ( "$@"; )
+        # push the return code of the command to the semaphore
+        printf '%.3d' $? >&3
+    )&
+}
+
+
+open_sem $(nproc || echo "4")
 for f in $(find "$APPDIR/usr/lib/mypaint/" -name "*.py")
 do
-pyminify --remove-literal-statements --no-convert-posargs-to-args --no-hoist-literals "$f" > /tmp/tmpf.py && mv -f /tmp/tmpf.py "$f"
+    run_with_lock minify "$f"
 done
 
 
