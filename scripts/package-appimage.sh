@@ -273,8 +273,6 @@ echo ""
     ln -f "$dummy" libnss3.so
     ln -f "$dummy" libnssutil3.so
     ln -s -f "$dummy" libsqlite3.so.0 && rm -f libsqlite3.so.0.*
-    ln -s -f "$dummy" libgssapi_krb5.so.2 && rm -f libgssapi_krb5.so.2.*
-    ln -s -f "$dummy" libGLX.so.0 && rm -f libGLX.so.0.*
     ln -s -f "$dummy" librpm.so.3 && rm -f librpm.so.3.*
     ln -s -f "$dummy" libcurl.so.4 && rm -f libcurl.so.4.*
     ln -s -f "$dummy" libtiff.so.5 && rm -f libtiff.so.5.*
