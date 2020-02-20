@@ -20,7 +20,7 @@ export CFLAGS='-O3 -ftree-vectorize -funsafe-math-optimizations -funsafe-loop-op
 
 cd "$APPIM_SOURCES/libmypaint"
 ./autogen.sh --prefix=/usr/local
-./configure --prefix=/usr/local --enable-introspection=no
+./configure --prefix=/usr/local --enable-introspection=no --enable-openmp
 make install
 
 
