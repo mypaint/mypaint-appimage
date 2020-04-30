@@ -21,6 +21,11 @@ with those same names. Symlinks cannot be used for this, as the root
 dir is mounted on the docker container, and the links won't resolve
 (unless they are relative and point to somewhere in the same subtree).
 
+There is also a convenience script, named `build-specific.sh`, for
+quickly setting up builds with specific dependency sources/versions.
+The primary use of the script is to build appimages for releases which
+aren't based on the master branches of the respective dependencies.
+
 > :warning:
 > These build scripts have been adapted from appimage builds from
 > multiple different projects. Just because something exists in these
@@ -52,6 +57,7 @@ python and to perform a number of the modifications required.
 When running on Travis CI, the docker build is run directly from the
 `.travis.yml` instructions without going via `build-on-docker.sh`.
 
+### Custom dependencies
 
 ## Non-standard stuff
 
