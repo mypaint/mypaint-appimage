@@ -45,7 +45,47 @@ fi
 
 # Remove some stuff we don't need
 
-cd "$APPDIR/usr/lib/python${PYTHON_VERSION}/site-packages/numpy/"
+cd "$APPDIR/usr/lib/python${PYTHON_VERSION}/"
+
+# This list is determined by the absence of corresponding *.pyc files, and will need to be updated when additional
+# dependencies are added, directly or indirectly. Just starting the program is not enough to trigger compilation
+# of all dependencies - the full functionality must be used in order to be sure.
+rm -rf aifc.py antigravity.py anydbm.py ast.py asynchat.py asyncore.py audiodev.py BaseHTTPServer.py \
+   Bastion.py bdb.py binhex.py bsddb calendar.py CGIHTTPServer.py cgi.py cgitb.py chunk.py cmd.py codeop.py \
+   code.py commands.py compileall.py compiler config cookielib.py Cookie.py crypt.py csv.py curses dbhash.py \
+   decimal.py dircache.py distutils doctest.py DocXMLRPCServer.py dumbdbm.py dummy_threading.py dummy_thread.py email \
+   filecmp.py fileinput.py formatter.py fpformat.py fractions.py ftplib.py getopt.py getpass.py gzip.py hmac.py hotshot \
+   htmlentitydefs.py htmllib.py HTMLParser.py httplib.py idlelib ihooks.py imaplib.py imghdr.py imputil.py lib2to3 \
+   _LWPCookieJar.py macpath.py macurl2path.py mailbox.py mailcap.py markupbase.py md5.py mhlib.py mimetools.py \
+   mimetypes.py MimeWriter.py mimify.py modulefinder.py _MozillaCookieJar.py multifile.py multiprocessing mutex.py \
+   netrc.py new.py nntplib.py ntpath.py nturl2path.py numbers.py os2emxpath.py _osx_support.py pdb.py __phello__.foo.py \
+   pickletools.py pipes.py plat-linux2 plistlib.py popen2.py poplib.py posixfile.py profile.py pty.py pyclbr.py \
+   py_compile.py pydoc_data _pyio.py Queue.py quopri.py rexec.py rfc822.py rlcompleter.py robotparser.py runpy.py \
+   sched.py sets.py sgmllib.py sha.py shelve.py SimpleHTTPServer.py SimpleXMLRPCServer.py smtpd.py \
+   smtplib.py sndhdr.py SocketServer.py sqlite3 sre.py statvfs.py stringold.py stringprep.py _strptime.py sunaudio.py \
+   sunau.py symbol.py symtable.py tabnanny.py tarfile.py telnetlib.py test this.py _threading_local.py timeit.py \
+   toaiff.py trace.py tty.py urllib2.py UserList.py user.py UserString.py uu.py wave.py whichdb.py \
+   wsgiref xdrlib.py xmllib.py xmlrpclib.py ctypes
+
+# These encodings should not be necessary for the linux-only appimage
+(cd encodings && rm -rf iso* cp* mac_*)
+
+# Determined by scripted trial and error. Some of these may need to be reinstated for performance reasons (if they are used).
+(cd lib-dynload &&
+        rm -rf arraymodule.so audioop.so _bisectmodule.so _bsddb.so bz2.so cmathmodule.so _cryptmodule.so _csv.so _ctypes.so \
+           _curses_panel.so _curses.so dbm.so dlmodule.so future_builtins.so gdbmmodule.so grpmodule.so _heapq.so _hotshot.so \
+           imageop.so _json.so linuxaudiodev.so _lsprof.so mmapmodule.so _multibytecodecmodule.so _multiprocessing.so \
+           nismodule.so ossaudiodev.so parsermodule.so readline.so resource.so spwdmodule.so _sqlite3.so _ssl.so stropmodule.so \
+           syslog.so termios.so timingmodule.so xxsubtype.so
+)
+
+cd site-packages
+# Some unused selinux stuff added after an update of the docker image
+rm -rf audit.py _audit.so auparse.so policycoreutils sepolicy sepolgen seobject semanage.py _semanage.so selinux
+rm -rf gpgme  markupsafe OpenSSL pycurl.so pygtkcompat rpm sqlitecachec.py _sqlitecache.so xattr.so
+
+cd numpy
+rm -rf doc distutils
 rm -f ./linalg/lapack_lite.so && touch ./linalg/lapack_lite.py
 rm -f ./core/_dotblas.so && touch ./core/_dotblas.py
 
