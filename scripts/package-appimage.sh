@@ -324,7 +324,7 @@ echo ""
 echo "Generating AppImage(s)"
 echo ""
 
-GIT_DESCRIBE=$(cd "$APPIM_SOURCES/mypaint" && git describe --tags)
+GIT_DESCRIBE=$(cd "$APPIM_SOURCES/mypaint" && git describe --tags || echo "tagless")
 export GIT_DESCRIBE
 echo "GIT_DESCRIBE: ${GIT_DESCRIBE}"
 
