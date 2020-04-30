@@ -6,11 +6,8 @@ SCRIPTDIR=$(dirname "$(readlink -f "$0")")
 APPIM_INIT_SCRIPT="scripts/mkappimage.sh"
 
 # If provided, the first argument should be the name
-# of the docker image that the build will be run on
-DOCKER_IMAGE="mypaint/appimage-base:1.2.0"
-if [ -n "$1" ]; then
-    DOCKER_IMAGE="$1"
-fi
+# of the docker image that the build will be run on.
+DOCKER_IMAGE=${1:-"mypaint/appimage-base:1.3.1"}
 
 function check_prerequisites
 {
@@ -45,4 +42,4 @@ check_prerequisites mypaint libmypaint mypaint-brushes
 # Pass in the USER envvar for convenience when building images locally,
 # so that permissions don't have to be updated after each build.
 docker run -it -eUSERID="$(id -u)" -v "${SCRIPTDIR}:/sources" \
-       "$DOCKER_IMAGE" "sources/$APPIM_INIT_SCRIPT"
+       "$DOCKER_IMAGE" scl enable devtoolset-7 "bash -c /sources/$APPIM_INIT_SCRIPT"

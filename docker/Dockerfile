@@ -16,3 +16,6 @@ do
 pyminify --remove-literal-statements --preserve-globals true "$f" > /tmp/tmpf.py && mv -f /tmp/tmpf.py "$f"
 done
 '
+
+yum -y install centos-release-sc1
+yum -y install devtoolset-7
