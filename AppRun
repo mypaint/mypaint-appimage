@@ -61,5 +61,8 @@ fi
 export GTK_LOCALEDIR=$APPDIR/usr/share/locale
 
 python $DIR/usr/bin/mypaint "$@"
+EXIT_CODE=$?
 
 rm -rf "$AILIBDIR"
+
+exit $EXIT_CODE
