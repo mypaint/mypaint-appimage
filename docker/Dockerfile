@@ -17,5 +17,5 @@ pyminify --remove-literal-statements --preserve-globals true "$f" > /tmp/tmpf.py
 done
 '
 
-yum -y install centos-release-sc1
-yum -y install devtoolset-7
+yum -y install centos-release-scl
+yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++

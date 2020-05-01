@@ -42,4 +42,4 @@ check_prerequisites mypaint libmypaint mypaint-brushes
 # Pass in the USER envvar for convenience when building images locally,
 # so that permissions don't have to be updated after each build.
 docker run -it -eUSERID="$(id -u)" -v "${SCRIPTDIR}:/sources" \
-       "$DOCKER_IMAGE" scl enable devtoolset-7 "bash -c /sources/$APPIM_INIT_SCRIPT"
+       "$DOCKER_IMAGE" scl enable devtoolset-8 "bash -c /sources/$APPIM_INIT_SCRIPT"
