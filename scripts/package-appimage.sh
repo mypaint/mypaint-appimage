@@ -242,8 +242,9 @@ find "$APPDIR/usr" -name "*.py[co]" -exec rm -f {} +
 find "$APPDIR/usr/lib" -type d -wholename "*numpy*tests*" -exec rm -rf {} +
 
 # Remove unused files
-find "$APPDIR/usr/" -name '*egg-info' -or -name '*.txt' -or -name '*.h' -exec rm -rf {} +
-find "$APPDIR/usr/" -name '*setup.py' -or -name '*setupscons.py' -exec rm -rf {} +
+find "$APPDIR/usr/" -name '*egg-info' -o -name '*.txt' -o -name '*.h' | xargs rm -rf
+find "$APPDIR/usr/" -wholename '*numpy/*/setup.py' -exec rm {} +
+
 
 echo ""
 echo "########################################################################"
