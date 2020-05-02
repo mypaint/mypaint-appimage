@@ -11,9 +11,11 @@ RUN yum install -y git wget file \
 RUN yum install -y python2-pip
 RUN pip install python-minifier
 RUN bash -c '
-for f in $(find / -name "*.py")
+
+# Prevent redundant minification by grepping for minification patterns
+for f in $(find /usr -name "*.py" -exec grep -E -L "(\*[A-Z])|(;.*;)" {} + )
 do
-pyminify --remove-literal-statements --preserve-globals true "$f" > /tmp/tmpf.py && mv -f /tmp/tmpf.py "$f"
+pyminify --remove-literal-statements "$f" > /tmp/tmpf.py && mv -f /tmp/tmpf.py "$f"
 done
 '
 
