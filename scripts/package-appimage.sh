@@ -52,11 +52,6 @@ cp -L /usr/bin/strings "$APPDIR/usr/bin"
 
 run_hooks
 
-
-if [ -e "/usr/share/gir-1.0" ]; then
-    cp -a "/usr/share/gir-1.0" "$APPDIR/usr/share"
-fi
-
 if [ -e "/usr/lib64/girepository-1.0" ]; then
     cp -a "/usr/lib64/girepository-1.0" "$APPDIR/usr/lib"
 fi
