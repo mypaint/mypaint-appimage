@@ -69,17 +69,6 @@ copy_deps2; copy_deps2; copy_deps2;
 echo ""
 echo "########################################################################"
 echo ""
-echo "Copy MIME files"
-echo ""
-
-# Copy MIME files
-mkdir -p usr/share/image
-cp -a /usr/share/mime/image/x-*.xml usr/share/image
-
-
-echo ""
-echo "########################################################################"
-echo ""
 echo "Move all libraries into $APPDIR/usr/lib"
 echo ""
 
