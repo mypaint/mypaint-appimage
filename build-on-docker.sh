@@ -7,7 +7,7 @@ APPIM_INIT_SCRIPT="scripts/mkappimage.sh"
 
 # If provided, the first argument should be the name
 # of the docker image that the build will be run on.
-DOCKER_IMAGE=${1:-"mypaint/appimage-base:1.3.1"}
+DOCKER_IMAGE=${1:-"mypaint/appimage-base:1.3.2"}
 
 function check_prerequisites
 {
