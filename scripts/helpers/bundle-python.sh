@@ -79,6 +79,18 @@ rm -rf aifc.py antigravity.py anydbm.py ast.py asynchat.py asyncore.py audiodev.
            syslog.so termios.so timingmodule.so xxsubtype.so
 )
 
+# Clear a bunch of modules that are currently not used - if/when integration tests
+# covering 100% of the mypaint modules are added, finding these modules can be easily
+# automated by running the integration tests on the prepared appimage files, and checking
+# which .py modules were not compiled to .pyc afterwards.
+(
+pref=$APPIM_SOURCES/scripts/helpers
+for f in $(cat $pref/"unimported")
+do
+    rm -f $f
+done
+)
+
 cd site-packages
 # Some unused selinux stuff added after an update of the docker image
 rm -rf audit.py _audit.so auparse.so policycoreutils sepolicy sepolgen seobject semanage.py _semanage.so selinux
