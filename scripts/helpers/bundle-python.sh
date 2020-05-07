@@ -85,8 +85,21 @@ rm -rf audit.py _audit.so auparse.so policycoreutils sepolicy sepolgen seobject 
 rm -rf gpgme  markupsafe OpenSSL pycurl.so pygtkcompat rpm sqlitecachec.py _sqlitecache.so xattr.so
 
 cd numpy
-rm -rf doc distutils
+rm -rf doc distutils oldnumeric
 rm -f ./linalg/lapack_lite.so && touch ./linalg/lapack_lite.py
 rm -f ./core/_dotblas.so && touch ./core/_dotblas.py
+
+cd core
+rm -rf lib include umath_tests.so multiarray_tests.so
+
+# This can only be removed if the import is removed from numpy/core/__init__.py
+# (and if it isn't used by MyPaint, of course)
+rm -f scalarmath.so
+cd ..
+
+# Imports of these otherwise unused modules removed must be
+# explicitly removed in the main numpy __init__.py file.
+# This is done in the docker image that the appimage is built on.
+rm -rf random ma fft add_newdocs.py
 
 echo "Python bundling finished"

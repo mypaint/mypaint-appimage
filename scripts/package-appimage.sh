@@ -292,6 +292,7 @@ echo ""
 (
     dummy="exec_wrapper2.so"
     pushd "$APPDIR/usr/lib"
+    rm libselinux*
     ln -s -f "$dummy" libtatlas.so.3 && rm -f libtatlas.so.3.*
     ln -f "$dummy" libnss3.so
     ln -f "$dummy" libnssutil3.so
@@ -352,6 +353,13 @@ find "$APPDIR" -name "*.mo" -exec rm {} +
 echo "
 supported_locales = []
 " >> "$APPDIR"/usr/lib/mypaint/lib/config.py
+
+
+# For the no-translations version, replace libharfbuzz with a dummy version
+(
+    cd "$APPDIR/usr/lib"
+    ln -s -f exec_wrapper2.so libharfbuzz.so.0 && rm -f libharfbuzz.so.0.*
+)
 
 generate_type2_appimage
 
