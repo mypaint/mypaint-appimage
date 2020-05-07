@@ -118,6 +118,13 @@ echo "Copy desktop file and application icon"
 mkdir -p usr/share/icons
 echo "cp -r \"/usr/local/share/icons/\"* \"usr/share/icons\""
 cp -r "/usr/local/share/icons/"* "usr/share/icons"
+# Remove some larger scalable icons which have better rasterized equivalents
+(
+  pref=mypaint-tool
+  cd usr/share/icons/hicolor/scalable/actions
+  rm -f $pref-*wheel* $pref-*cube* $pref-component-sliders*
+)
+
 mkdir -p usr/share/applications
 cp /usr/local/share/applications/"${LOWERAPP}".desktop usr/share/applications
 
