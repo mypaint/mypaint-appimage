@@ -89,29 +89,6 @@ delete_blacklisted2
 echo ""
 echo "########################################################################"
 echo ""
-echo "Copy libfontconfig into the AppImage"
-echo ""
-
-# Copy libfontconfig into the AppImage
-# It will be used if they are newer than those of the host
-# system in which the AppImage will be executed
-mkdir -p usr/optional/fontconfig
-fc_prefix="$(pkg-config --variable=libdir fontconfig)"
-cp -a "${fc_prefix}/libfontconfig"* usr/optional/fontconfig
-
-
-echo ""
-echo "########################################################################"
-echo ""
-echo "Copy libstdc++.so.6 and libgomp.so.1 into the AppImage"
-echo ""
-
-copy_gcc_libs
-
-
-echo ""
-echo "########################################################################"
-echo ""
 echo "Copy desktop file and application icon"
 
 # Copy hicolor icon theme (mypaint only)
