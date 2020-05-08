@@ -286,6 +286,28 @@ do
     run_with_lock minify "$f"
 done
 
+echo ""
+echo "########################################################################"
+echo ""
+echo "Stripping xml data"
+echo ""
+
+strip_xml_ws_and_comments() {
+    # We only strip leading whitespace - it is sufficient for the data processed here
+    sed -E 's/^\s*//' | tr -d '\n' | sed -E 's/<!--([^-]|-[^-])*-->//g';
+}
+
+strip_xml() {
+    local tmpfile
+    tmpfile=$(mktemp)
+    strip_xml_ws_and_comments < "$1" > $tmpfile && mv -f $tmpfile "$1"
+}
+
+for f in $(find "$APPDIR/usr/" -name "*.xml" -or -name "*.glade")
+do
+    run_with_lock strip_xml "$f"
+done
+
 
 echo ""
 echo "########################################################################"
