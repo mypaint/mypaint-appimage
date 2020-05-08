@@ -258,7 +258,8 @@ run_with_lock(){
 
 
 open_sem $(nproc || echo "4")
-for f in $(find "$APPDIR/usr/lib/mypaint/" -name "*.py")
+for f in "$APPDIR/usr/bin/mypaint" "$APPDIR/usr/bin/python2.7-config" \
+         $(find "$APPDIR/usr/lib/mypaint/" -name "*.py")
 do
     run_with_lock minify "$f"
 done
