@@ -43,6 +43,14 @@ if [ -n "$gssapilib" ]; then
     cp -a "$gssapilibdir"/libgssapi_krb5*.so* "$APPDIR/usr/lib"
 fi
 
+# Prepare the hashlib replacement - to remove a bunch of dependencies unique to the regular hashlib
+HLIB_FOLDER="$APPIM_SOURCES/althashlib/"
+GCR_WRAPPER=gcrypt_hash_wrapper
+cd $HLIB_FOLDER
+python setup.py build_ext --inplace
+pyminify --remove-literal-statements althashlib.py > hashlib.py
+pyminify --remove-literal-statements $GCR_WRAPPER.py > tmp && mv tmp $GCR_WRAPPER.py
+
 # Remove some stuff we don't need
 
 cd "$APPDIR/usr/lib/python${PYTHON_VERSION}/"
@@ -67,6 +75,11 @@ rm -rf aifc.py antigravity.py anydbm.py ast.py asynchat.py asyncore.py audiodev.
    toaiff.py trace.py tty.py urllib2.py UserList.py user.py UserString.py uu.py wave.py whichdb.py \
    wsgiref xdrlib.py xmllib.py xmlrpclib.py ctypes
 
+# Replace the regular hashlib with our alternative smaller version
+
+mv $HLIB_FOLDER/hashlib.py .
+mv $HLIB_FOLDER/_$GCR_WRAPPER*so $HLIB_FOLDER/$GCR_WRAPPER.py .
+
 # These encodings should not be necessary for the linux-only appimage
 (cd encodings && rm -rf iso* cp* mac_*)
 
@@ -76,7 +89,7 @@ rm -rf aifc.py antigravity.py anydbm.py ast.py asynchat.py asyncore.py audiodev.
            _curses_panel.so _curses.so dbm.so dlmodule.so future_builtins.so gdbmmodule.so grpmodule.so _heapq.so _hotshot.so \
            imageop.so _json.so linuxaudiodev.so _lsprof.so mmapmodule.so _multibytecodecmodule.so _multiprocessing.so \
            nismodule.so ossaudiodev.so parsermodule.so readline.so resource.so spwdmodule.so _sqlite3.so _ssl.so stropmodule.so \
-           syslog.so termios.so timingmodule.so xxsubtype.so
+           syslog.so termios.so timingmodule.so xxsubtype.so _hashlib.so
 )
 
 # Clear a bunch of modules that are currently not used - if/when integration tests
