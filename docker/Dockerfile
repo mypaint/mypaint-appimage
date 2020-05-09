@@ -21,3 +21,5 @@ done
 
 yum -y install centos-release-scl
 yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++
+# Used to compile the hashlib replacement
+yum -y install libgcrypt-devel

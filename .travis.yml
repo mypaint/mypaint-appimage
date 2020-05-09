@@ -25,7 +25,7 @@ before_script:
   - git clone https://github.com/mypaint/mypaint-brushes.git
   - # 20 minutes should be plenty to pull the docker image
   - travis_wait 20
-    sudo docker pull mypaint/appimage-base:1.3.2
+    sudo docker pull mypaint/appimage-base:1.3.3
 
 script:
   - sudo docker run -t -v $(pwd):/sources mypaint/appimage-base:1.3.2
