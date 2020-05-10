@@ -2,42 +2,43 @@
 # should NOT be bundled inside AppImages. This is a working document; expect it to change
 # over time. File format: one filename per line. Each entry should have a justification comment.
 
-ld-linux.so.2
-ld-linux-x86-64.so.2
-libanl.so.1
-libBrokenLocale.so.1
-libcidn.so.1
-libcrypt.so.1
-libc.so.6
-libdl.so.2
-libm.so.6
-libmvec.so.1
-libnsl.so.1
-libnss_compat.so.2
-libnss_db.so.2
-libnss_dns.so.2
-libnss_files.so.2
-libnss_hesiod.so.2
-libnss_nisplus.so.2
-libnss_nis.so.2
-libpthread.so.0
-libresolv.so.2
-librt.so.1
-libthread_db.so.1
-libutil.so.1
+ld-linux.so
+ld-linux-x86-64.so
+libanl.so
+libBrokenLocale.so
+libcidn.so
+libcrypt.so
+libc.so
+libdl.so
+libm.so
+libmvec.so
+libnsl.so
+libnss_compat.so
+libnss_db.so
+libnss_dns.so
+libnss_files.so
+libnss_hesiod.so
+libnss_nisplus.so
+libnss_nis.so
+libpthread.so
+libresolv.so
+librt.so
+libthread_db.so
+libutil.so
 # These files are all part of the GNU C Library which should never be bundled.
 # List was generated from a fresh build of glibc 2.25.
 
-libstdc++.so.6
+libstdc++.so
 # Workaround for:
 # usr/lib/libstdc++.so.6: version `GLIBCXX_3.4.21' not found
 
-libGL.so.1
+libGL.so
+libGLX.so
 # Part of the video driver (OpenGL); present on any regular
 # desktop system, may also be provided by proprietary drivers.
 # Known to cause issues if it's bundled.
 
-libdrm.so.2
+libdrm.so
 # Workaround for:
 # Antergos Linux release 2015.11 (ISO-Rolling)
 # /usr/lib/libdrm_amdgpu.so.1: error: symbol lookup error: undefined symbol: drmGetNodeTypeFromFd (fatal)
@@ -54,7 +55,7 @@ libdrm.so.2
 # undefined symbol: xcb_send_request_with_fds
 # https://github.com/probonopd/AppImages/issues/128
 
-libX11.so.6
+libX11.so
 # Workaround for:
 # Fedora 23
 # symbol lookup error: ./lib/libX11.so.6: undefined symbol: xcb_wait_for_reply64
@@ -65,8 +66,6 @@ libX11.so.6
 # Workaround for:
 # xkbcommon: ERROR: failed to add default include path ././/share/X11/xkb
 
-libdbus-1.so.3.6.0
-libdbus-1.so.3
 libdbus-1.so
 # Workaround for:
 # D-Bus library appears to be incorrectly set up; failed to read machine uuid: Failed to open "././/var/lib/dbus/machine-id": No such file or directory
@@ -75,11 +74,11 @@ libdbus-1.so
 # Workaround for:
 # On Ubuntu, "symbol lookup error: /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/liboverlay-scrollbar.so: undefined symbol: g_settings_new"
 
-libgdk-x11-2.0.so.0
-libgtk-x11-2.0.so.0
+libgdk-x11-2.0.so
+libgtk-x11-2.0.so
 # Simply to reduce size - not known to cause issues
 
-libasound.so.2
+libasound.so
 # Workaround for:
 # No sound, e.g., in VLC.AppImage (does not find sound cards)
 
@@ -98,35 +97,34 @@ libasound.so.2
 # The following are assumed to be part of the base system
 # Removing these has worked e.g., for Krita. Feel free to report if
 # you think that some of these should go into AppImages and why.
-libcom_err.so.2
-libcrypt.so.1
-libexpat.so.1
-libgcc_s.so.1
+libcom_err.so
+libcrypt.so
+libexpat.so
+libgcc_s.so
 #libglib-2.0.so.0
-libgpg-error.so.0
-libgpg-error.so.0.6.0
+libgpg-error.so
 #libgssapi_krb5.so.2 # Disputed, seemingly needed by Arch Linux since Kerberos is named differently there
 # libgssapi.so.3 # Seemingly needed when running Ubuntu 14.04 binaries on Fedora 23
-libhcrypto.so.4
+libhcrypto.so
 # libheimbase.so.1 # Seemingly needed when running Ubuntu 14.04 binaries on Fedora 23
 # libheimntlm.so.0 # Seemingly needed when running Ubuntu 14.04 binaries on Fedora 23
-libhx509.so.5
-libICE.so.6
-libidn.so.11
+libhx509.so
+libICE.so
+libidn.so
 #libk5crypto.so.3
 #libkeyutils.so.1
 #libkrb5.so.26 # Disputed, seemingly needed by Arch Linux since Kerberos is named differently there
 #libkrb5.so.3 # Disputed, seemingly needed by Arch Linux since Kerberos is named differently there
 #libkrb5support.so.0 # Disputed, seemingly needed by Arch Linux since Kerberos is named differently there
-libp11-kit.so.0
+libp11-kit.so
 # libpcre.so.3 # Missing on Fedora 24 and on SLED 12 SP1
-libroken.so.18
+libroken.so
 # libsasl2.so.2 # Seemingly needed when running Ubuntu 14.04 binaries on Fedora 23
-libSM.so.6
-libusb-1.0.so.0
-libuuid.so.1
-libwind.so.0
-libz.so.1
+libSM.so
+libusb-1.0.so
+libuuid.so
+libwind.so
+libz.so
 
 # Potentially dangerous libraries
 #libgobject-2.0.so.0
@@ -136,7 +134,7 @@ libz.so.1
 # relocation error: /lib/x86_64-linux-gnu/libgcrypt.so.20: 
 # symbol gpgrt_lock_lock, version GPG_ERROR_1.0 not defined
 # in file libgpg-error.so.0 with link time reference
-libgpg-error.so.0
+libgpg-error.so
 
 # Unsolved issue:
 # https://github.com/probonopd/linuxdeployqt/issues/35

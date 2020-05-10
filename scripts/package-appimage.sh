@@ -1,5 +1,4 @@
 #! /bin/bash
-1;4205;0c
 LOWERAPP=${APP,,}
 export PATH="/usr/local/bin:${PATH}"
 export LD_LIBRARY_PATH="/usr/local/lib64:/usr/local/lib:${LD_LIBRARY_PATH}"
@@ -61,9 +60,21 @@ set -e
 cd "$APPDIR"
 
 
+
+echo ""
+echo "########################################################################"
+echo ""
+echo "Copy dependencies, excluding blacklisted libraries"
+echo ""
+
+copy_deps2; delete_blacklisted2;
+copy_deps2; delete_blacklisted2;
+copy_deps2; delete_blacklisted2;
+copy_deps2; delete_blacklisted2;
+
+
 # Copy in the dependencies that cannot be assumed to be available
 # on all target systems
-copy_deps2; copy_deps2; copy_deps2;
 
 
 echo ""
@@ -72,19 +83,7 @@ echo ""
 echo "Move all libraries into $APPDIR/usr/lib"
 echo ""
 
-# Move all libraries into $APPDIR/usr/lib
 move_lib
-
-
-echo ""
-echo "########################################################################"
-echo ""
-echo "Delete blacklisted libraries"
-echo ""
-
-# Delete dangerous libraries; see
-# https://github.com/probonopd/AppImages/blob/master/excludelist
-delete_blacklisted2
 
 echo ""
 echo "########################################################################"

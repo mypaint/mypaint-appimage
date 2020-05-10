@@ -217,7 +217,6 @@ delete_blacklisted2()
 {
     #printf '%s\n' "APPIMAGEBASE: ${APPIMAGEBASE}"
     #ls "${APPIMAGEBASE}"
-
     pwd
     while IFS= read -r line; do
         #echo "line: ${line}"
@@ -227,7 +226,7 @@ delete_blacklisted2()
         for F in $FLIST; do
           rm -v -f "$F"
         done
-    done < <(cat "$APPDIR/../excludelist" | sed '/^[[:space:]]*$/d' | sed '/^#.*$/d')
+    done < <(cat "$APPDIR/../excludelist" | sed '/^\s*$/d' | sed '/^#.*$/d')
     # TODO Try this, its cleaner if it works:
     #done < "$APPIMAGEBASE/excludelist" | sed '/^[[:space:]]*$/d' | sed '/^#.*$/d'
 }
