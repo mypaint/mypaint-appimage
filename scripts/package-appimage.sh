@@ -362,13 +362,9 @@ supported_locales = []
 " >> "$APPDIR"/usr/lib/mypaint/lib/config.py
 
 
-# For the no-translations version, replace libharfbuzz with a dummy version
-# and remove all unused encodings
+# For the no-translations version, remove all unused encodings
 (
-    cd "$APPDIR/usr/lib"
-    ln -s -f exec_wrapper2.so libharfbuzz.so.0 && rm -f libharfbuzz.so.0.*
-
-    cd python2.7
+    cd "$APPDIR"/usr/lib/python2.7
     pref=$APPIM_SOURCES/scripts/helpers
     for f in $(cat $pref/"unimported-encodings")
     do
