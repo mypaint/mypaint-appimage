@@ -1,5 +1,5 @@
 #! /bin/bash
-
+1;4205;0c
 LOWERAPP=${APP,,}
 export PATH="/usr/local/bin:${PATH}"
 export LD_LIBRARY_PATH="/usr/local/lib64:/usr/local/lib:${LD_LIBRARY_PATH}"
@@ -286,6 +286,20 @@ do
     run_with_lock strip_xml "$f"
 done
 
+
+# Run scour on the Adwaita icon subset (non-destructive minification)
+minifysvg() {
+    tmp=$(mktemp)
+    scour --remove-descriptive-elements -q -i "$1" > "$tmp" && mv "$tmp" "$1";
+}
+
+(
+    cd $scl_dir
+    for svg in $(find -name "*.svg")
+    do
+        run_with_lock minifysvg "$svg"
+    done
+)
 
 echo ""
 echo "########################################################################"
