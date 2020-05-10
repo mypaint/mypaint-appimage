@@ -371,6 +371,7 @@ popd
 
 # Generate AppImage without bundled translations
 find "$APPDIR" -name "*.mo" -exec rm {} +
+rm -rf "$APPDIR/usr/share/locale/"
 echo "
 supported_locales = []
 " >> "$APPDIR"/usr/lib/mypaint/lib/config.py
