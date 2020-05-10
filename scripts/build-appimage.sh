@@ -16,7 +16,7 @@ set -e
 # These are pretty generic, ideally one would compile for own native arch
 # We could try to target several CPU families in the future and distribute
 # several binary packages.
-export CFLAGS='-O3 -ftree-vectorize -funsafe-math-optimizations -funsafe-loop-optimizations'
+export CFLAGS='-Os -ftree-vectorize -funsafe-math-optimizations -funsafe-loop-optimizations'
 
 cd "$APPIM_SOURCES/libmypaint"
 ./autogen.sh --prefix=/usr/local
