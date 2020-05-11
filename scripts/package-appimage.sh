@@ -312,7 +312,6 @@ echo ""
 (
     dummy="exec_wrapper2.so"
     pushd "$APPDIR/usr/lib"
-    rm libselinux*
     ln -s -f "$dummy" libtatlas.so.3 && rm -f libtatlas.so.3.*
     ln -f "$dummy" libnss3.so
     ln -f "$dummy" libnssutil3.so
