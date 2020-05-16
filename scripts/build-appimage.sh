@@ -28,6 +28,9 @@ cd "$APPIM_SOURCES/mypaint-brushes"
 ./autogen.sh --prefix=/usr/local
 ./configure --prefix=/usr/local
 make install
+# Minify brushes after install
+find /usr/local/share/mypaint-data/ -name "*.myb" |
+    xargs "$APPIM_SOURCES/scripts/helpers/brushfile-minifier.py" ../libmypaint/brushsettings.json
 
 
 cd "$APPIM_SOURCES/mypaint"
