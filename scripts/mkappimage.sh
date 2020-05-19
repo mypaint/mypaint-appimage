@@ -10,6 +10,7 @@ export WORK_DIR
 export APPROOT=$WORK_DIR/appimage
 
 mkdir -p "$APPROOT/scripts"
+cp -a "$APPIM_SOURCES/scripts/helpers/bundle-licenses.sh" "$APPROOT/scripts"
 cp -a "$APPIM_SOURCES/scripts/helpers/bundle-python.sh" "$APPROOT/scripts"
 cp -a "$APPIM_SOURCES/scripts/helpers/bundle-gtk3.sh" "$APPROOT/scripts"
 
