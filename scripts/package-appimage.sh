@@ -306,21 +306,27 @@ echo ""
 echo "Removing/relinking unused shared objects"
 echo ""
 
+dummify() {
+    local dummy
+    dummy="libgomp.so.1.0.0"
+    rm -f "$1"
+    ln "$dummy" "$1"
+    rm -f "$1".*
+}
+
 # This step should be the first to check if things start crashing.
 # We remove the things that are not used right now, but they may
 # be used at some future point in time (directly or indirectly).
 (
-    dummy="exec_wrapper2.so"
-    pushd "$APPDIR/usr/lib"
-    ln -s -f "$dummy" libtatlas.so.3 && rm -f libtatlas.so.3.*
-    ln -f "$dummy" libnss3.so
-    ln -f "$dummy" libnssutil3.so
-    ln -s -f "$dummy" libsqlite3.so.0 && rm -f libsqlite3.so.0.*
-    ln -s -f "$dummy" librpm.so.3 && rm -f librpm.so.3.*
-    ln -s -f "$dummy" libcurl.so.4 && rm -f libcurl.so.4.*
-    ln -s -f "$dummy" libtiff.so.5 && rm -f libtiff.so.5.*
-    ln -s -f "$dummy" libssh.so.2 && rm -f libssh.so.2.*
-    popd
+    cd "$APPDIR/usr/lib"
+    dummify libtatlas.so.3
+    dummify libnss3.so
+    dummify libnssutil3.so
+    dummify libsqlite3.so.0
+    dummify librpm.so.3
+    dummify libcurl.so.4
+    dummify libtiff.so.5
+    dummify libssh.so.2
 )
 
 echo ""
