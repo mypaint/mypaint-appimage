@@ -49,7 +49,10 @@ cp -a /usr/local/share/*"${LOWERAPP}"* "$APPDIR/usr/share"
 # Used at startup to check whether to use bundled or installed libs
 cp -L /usr/bin/strings "$APPDIR/usr/bin"
 
-run_hooks
+. "$APPIM_SOURCES/scripts/helpers/bundle-licenses.sh"
+. "$APPIM_SOURCES/scripts/helpers/bundle-python.sh"
+. "$APPIM_SOURCES/scripts/helpers/bundle-gtk3.sh"
+
 
 if [ -e "/usr/lib64/girepository-1.0" ]; then
     cp -a "/usr/lib64/girepository-1.0" "$APPDIR/usr/lib"
@@ -128,7 +131,6 @@ echo ""
 
 cp -a -t . \
    "$APPIM_SOURCES/AppRun" \
-   "$APPIM_SOURCES/scripts/helpers/apprun-helper.sh" \
    "$APPIM_SOURCES/scripts/helpers/gtk-theme-helper.py"
 get_desktop
 get_icon

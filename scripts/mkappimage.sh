@@ -10,9 +10,6 @@ export WORK_DIR
 export APPROOT=$WORK_DIR/appimage
 
 mkdir -p "$APPROOT/scripts"
-cp -a "$APPIM_SOURCES/scripts/helpers/bundle-licenses.sh" "$APPROOT/scripts"
-cp -a "$APPIM_SOURCES/scripts/helpers/bundle-python.sh" "$APPROOT/scripts"
-cp -a "$APPIM_SOURCES/scripts/helpers/bundle-gtk3.sh" "$APPROOT/scripts"
 
 DO_BUILD=0
 if [ ! -e "$WORK_DIR"/build.done ]; then DO_BUILD=1; fi

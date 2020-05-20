@@ -2,41 +2,30 @@
 
 export MYPAINT_ENV_CLEAN="$(env)"
 
-DIR="`dirname \"$0\"`" 
+DIR="`dirname \"$0\"`"
 DIR="`( cd \"$DIR\" && readlink -f $(pwd) )`"
 echo "DIR: $DIR"
 export APPDIR=$DIR
 
+
+# Set up environment
 export PYTHONHOME=$DIR/usr/
-export PATH=$DIR/usr/bin:$PATH
+export PATH="$APPDIR/usr/bin:${PATH}:/sbin:/usr/sbin"
+export LD_LIBRARY_PATH="$APPDIR/usr/lib:/usr/lib:$LD_LIBRARY_PATH"
+export GCONV_PATH="${APPDIR}/usr/lib/gconv"
 
-source "$APPDIR/apprun-helper.sh"
-save_environment
-make_temp_libdir
-link_libraries
-echo "AILIBDIR=$AILIBDIR"
+# Set up gdkpixbuf vars
+export GDK_PIXBUF_MODULEDIR="${APPDIR}/usr/lib/gdk-pixbuf-2.0/loaders"
+export GDK_PIXBUF_MODULE_FILE="${APPDIR}/usr/lib/gdk-pixbuf-2.0/loaders.cache"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$GDK_PIXBUF_MODULEDIR"
 
-init_environment
-
-fix_libxcb_dri3
-fix_stdlibcxx
-#fix_fontconfig
-fix_library "libfontconfig"
-fix_library "libfreetype"
-
-export APPDIRS=$AILIBDIR:$APPDIRS
-
-init_gtk
-
-#export XDG_CONFIG_DIRS=$DIR/usr/share:$XDG_CONFIG_DIRS
+# Set up user data locations and GObject introspection
 export XDG_DATA_DIRS=$DIR/usr/share:$XDG_DATA_DIRS:/usr/local/share:/usr/share
 export GI_TYPELIB_PATH=$DIR/usr/lib/girepository-1.0
 
 if [ -e /etc/fonts/fonts.conf ]; then
   export FONTCONFIG_PATH=/etc/fonts
 fi
-
-run_hooks
 
 # Set Adwaita theme explicitly, but allow it to be overridden
 # by setting GTK_THEME when starting the appimage, in which
@@ -64,7 +53,5 @@ export GTK_LOCALEDIR=$APPDIR/usr/share/locale
 
 python $DIR/usr/bin/mypaint "$@"
 EXIT_CODE=$?
-
-rm -rf "$AILIBDIR"
 
 exit $EXIT_CODE
