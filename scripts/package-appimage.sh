@@ -181,13 +181,6 @@ do
     fi
 done
 
-(
-    set +e
-    cd "$APPIM_SOURCES/scripts/helpers/appimage-exec-wrapper2";
-    make && cp -a exec.so "$APPDIR/usr/lib/exec_wrapper2.so"
-    true
-)
-
 echo ""
 echo "########################################################################"
 echo ""
