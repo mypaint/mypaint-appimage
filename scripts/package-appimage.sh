@@ -357,7 +357,7 @@ $lib_hash" > "${APPDIR}/build_source_commits.txt"
 
 
 # Generate AppImage; this expects $ARCH, $APP and $VERSION to be set
-generate_type2_appimage --comp=xz
+generate_type2_appimage
 
 APPIM_FILE_NAME="${APP}-${VERSION_FULL}.AppImage"
 
@@ -386,7 +386,7 @@ supported_locales = []
     done
 )
 
-generate_type2_appimage --comp=xz
+generate_type2_appimage
 
 APPIM_FILE_NAME="${APP}-${VERSION_FULL}-no-translations.AppImage"
 
