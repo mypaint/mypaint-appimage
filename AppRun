@@ -1,9 +1,9 @@
 #!/bin/bash
 
-export MYPAINT_ENV_CLEAN="$(env)"
+MYPAINT_ENV_CLEAN="$(env)"
+export MYPAINT_ENV_CLEAN
 
-DIR="`dirname \"$0\"`"
-DIR="`( cd \"$DIR\" && readlink -f $(pwd) )`"
+DIR="$(readlink -f "$(dirname "$0")")"
 echo "DIR: $DIR"
 export APPDIR=$DIR
 
@@ -54,7 +54,7 @@ fi
 # pick up the bundled .mo files
 export GTK_LOCALEDIR=$APPDIR/usr/share/locale
 
-python $DIR/usr/bin/mypaint "$@"
+python "$DIR/usr/bin/mypaint" "$@"
 EXIT_CODE=$?
 
 exit $EXIT_CODE
