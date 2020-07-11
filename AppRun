@@ -5,6 +5,8 @@ export MYPAINT_ENV_CLEAN
 
 DIR="$(readlink -f "$(dirname "$0")")"
 echo "DIR: $DIR"
+# The name of this variable is significant - it is used by the patched
+# mypaint startup script to strip out non-appimage module search paths.
 export APPDIR=$DIR
 
 

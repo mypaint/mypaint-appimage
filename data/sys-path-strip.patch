@@ -1,0 +1,14 @@
+diff --git a/mypaint.py b/mypaint.py
+index 4a25e56..97e13ca 100644
+--- a/mypaint.py
++++ b/mypaint.py
+@@ -25,6 +25,9 @@ import os
+ import re
+ import logging
+ 
++_appim_prefix = os.environ["APPDIR"]
++sys.path[:] = [p for p in sys.path if p.startswith(_appim_prefix)]
++
+ logger = logging.getLogger('mypaint')
+ if sys.version_info >= (3,):
+     xrange = range

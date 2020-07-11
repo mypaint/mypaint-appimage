@@ -211,6 +211,19 @@ find "$APPDIR/usr/" -wholename '*numpy/*/setup.py' -exec rm {} +
 echo ""
 echo "########################################################################"
 echo ""
+echo "Apply sys.path-modification patch to main script"
+echo ""
+
+# This patch removes non-appimage paths from sys.path prior to any other module
+# loading. When the appimage switches to using Py3, patching the sysconfig module
+# directly may be preferable.
+
+patch "$APPDIR/usr/bin/mypaint" "$APPIM_SOURCES/data/sys-path-strip.patch"
+
+
+echo ""
+echo "########################################################################"
+echo ""
 echo "Minifying MyPaint modules"
 echo ""
 
