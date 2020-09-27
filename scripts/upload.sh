@@ -23,7 +23,7 @@ rel_script="$(readlink -f "$(dirname "$0")")"/release.py
 
 rel()
 {
-    $rel_script -a GITHUB_TOKEN "$TRAVIS_REPO_SLUG" "$@"
+    $rel_script -a GITHUB_BOT_TOKEN "$TRAVIS_REPO_SLUG" "$@"
 }
 
 # == Create new continous release ==
