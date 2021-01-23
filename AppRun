@@ -1,6 +1,11 @@
 #!/bin/bash
 
-MYPAINT_ENV_CLEAN="$(env)"
+
+# Store the outer environment in a file, with variables, separated
+# by null bytes to avoid issues with newlines inside definitions.
+MYPAINT_ENV_CLEAN=$(mktemp)
+echo "writing appimage env to $MYPAINT_ENV_CLEAN"
+env --null > "$MYPAINT_ENV_CLEAN"
 export MYPAINT_ENV_CLEAN
 
 DIR="$(readlink -f "$(dirname "$0")")"
@@ -58,5 +63,7 @@ export GTK_LOCALEDIR=$APPDIR/usr/share/locale
 
 python "$DIR/usr/bin/mypaint" "$@"
 EXIT_CODE=$?
+
+rm -r "$MYPAINT_ENV_CLEAN"
 
 exit $EXIT_CODE
